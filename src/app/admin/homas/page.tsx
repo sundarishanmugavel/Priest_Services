@@ -1,7 +1,7 @@
 import ContentManager from "@/components/admin/ContentManager";
 
 /** Module-level stable reference — inline arrays in the component body change every render and break filter memoization. */
-const PUJA_ADMIN_FILTER_GROUPS = [
+const HOMA_ADMIN_FILTER_GROUPS = [
   {
     label: "Deity",
     options: [
@@ -50,7 +50,7 @@ const PUJA_ADMIN_FILTER_GROUPS = [
   },
 ];
 
-export default function AdminPujasPage() {
+export default function AdminHomasPage() {
   const fields = [
     { name: "title", label: "Main Title", type: "text", required: true },
     { name: "productId", label: "AstroVed Product ID", type: "number", placeholder: "e.g. 10, 24, 27" },
@@ -105,11 +105,11 @@ export default function AdminPujasPage() {
     { name: "heroSubtitle", label: "Hero Subtitle", type: "textarea" },
     { name: "strengthFor", label: "Strength/Use For", type: "textarea" },
     { name: "ritualSummary", label: "Ritual Summary", type: "textarea" },
-    { name: "about", label: "About Puja", type: "textarea" },
+    { name: "about", label: "About Homa", type: "textarea" },
     { name: "templeLocation", label: "Temple Location (Details Section)", type: "text" },
-    { 
-      name: "gallery", 
-      label: "Gallery Image URLs", 
+    {
+      name: "gallery",
+      label: "Gallery Image URLs",
       type: "array-string",
       placeholder: "https://example.com/image.jpg"
     },
@@ -167,10 +167,10 @@ export default function AdminPujasPage() {
       referenceLabelField: "name"
     },
     {
-      name: "recommendedHomaIds",
-      label: "Select Recommended Homas",
+      name: "recommendedPujaIds",
+      label: "Select Recommended Pujas",
       type: "reference-array",
-      referenceEndpoint: "/api/admin/content?type=homa",
+      referenceEndpoint: "/api/admin/content?type=puja",
       referenceLabelField: "title"
     },
     {
@@ -183,11 +183,11 @@ export default function AdminPujasPage() {
 
   return (
     <ContentManager
-      type="puja"
-      title="Pujas"
+      type="homa"
+      title="Homas"
       fields={fields as any}
       searchFields={["title", "subtitle", "description", "location", "slug", "badge", "shortTitle"]}
-      filterGroups={PUJA_ADMIN_FILTER_GROUPS}
+      filterGroups={HOMA_ADMIN_FILTER_GROUPS}
       dynamicPujaLocationFromItems
     />
   );

@@ -22,8 +22,9 @@ function isoToDdmmyyyy(iso: string): string {
 interface SubField {
   name: string;
   label: string;
-  type: "text" | "textarea" | "url" | "number";
+  type: "text" | "textarea" | "url" | "number" | "select";
   placeholder?: string;
+  options?: string[];
 }
 
 interface Field {
@@ -681,9 +682,9 @@ export default function ContentManager({
                           <button type="button" onClick={() => removeArrayItem(field.name, idx, field.label)} className="absolute right-2 top-2 text-red-500 hover:text-red-700">
                             <TrashIcon className="h-5 w-5" />
                           </button>
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-2">
+                          <div className="grid grid-cols-1 gap-4 mt-2">
                             {field.objectSchema?.map(sub => (
-                              <div key={sub.name} className={sub.type === "textarea" ? "sm:col-span-2" : ""}>
+                              <div key={sub.name}>
                                 <label className="block text-xs font-medium text-gray-700">{sub.label}</label>
                                 {sub.type === "textarea" ? (
                                   <textarea
@@ -693,6 +694,17 @@ export default function ContentManager({
                                     placeholder={sub.placeholder}
                                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#6869F9] focus:outline-none focus:ring-[#1f1f1f] sm:text-sm"
                                   />
+                                ) : sub.type === "select" ? (
+                                  <select
+                                    value={val[sub.name] || ""}
+                                    onChange={(e) => handleArrayChange(field.name, idx, e.target.value, sub.name)}
+                                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#6869F9] focus:outline-none focus:ring-[#1f1f1f] sm:text-sm"
+                                  >
+                                    <option value="">-- Select {sub.label} --</option>
+                                    {sub.options?.map(opt => (
+                                      <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                  </select>
                                 ) : (
                                   <input
                                     type={sub.type}
@@ -869,7 +881,7 @@ export default function ContentManager({
                           </>
                         ) : (
                           <>
-                            {type === "puja" && (
+                            {(type === "puja" || type === "homa") && (
                               <>
                                 <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${item.status === "inactive" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
                                   {item.status === "inactive" ? "Inactive" : "Active"}
@@ -885,7 +897,7 @@ export default function ContentManager({
                                 >
                                   Mark {item.status === "inactive" ? "Active" : "Inactive"}
                                 </button>
-                                <a href={`/puja/${item.slug || String(item.title || "").toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-")}`} target="_blank" rel="noreferrer" className="text-[#000000] hover:text-[#4647c4]" title="View puja">
+                                <a href={`/${type}/${item.slug || String(item.title || "").toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-")}`} target="_blank" rel="noreferrer" className="text-[#000000] hover:text-[#4647c4]" title={`View ${type}`}>
                                   <EyeIcon className="h-5 w-5" />
                                 </a>
                               </>

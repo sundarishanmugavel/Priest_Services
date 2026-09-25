@@ -51,10 +51,14 @@ export async function generateMetadata(
   };
 }
 
+import { getAllHomas } from '@/lib/homas';
+
 export default async function PujaDetailPage({ params }: Props) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
   const puja = slug ? await getPujaBySlug(slug) : null;
+  const allHomas = await getAllHomas();
+  const recommendations = allHomas.filter(h => (puja as any)?.recommendedHomaIds?.includes(String(h._id)));
 
-  return <PujaDetailClient initialPuja={puja as any} />;
+  return <PujaDetailClient initialPuja={puja as any} recommendations={recommendations} />;
 }

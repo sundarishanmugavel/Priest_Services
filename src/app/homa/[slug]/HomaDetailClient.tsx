@@ -95,7 +95,7 @@ type PujaDetails = {
   faq: PujaFaq[];
 };
 
-type Puja = {
+type homa = {
   _id: string;
   title: string;
   subtitle?: string;
@@ -166,7 +166,7 @@ const buildCountdown = (target: Date): Countdown => {
 };
 
 const Marquee = 'marquee' as any;
-export default function PujaDetailClient({ initialPuja, recommendations = [] }: { initialPuja: Puja | null; recommendations?: any[] }) {
+export default function PujaDetailClient({ initialPuja, recommendations = [] }: { initialPuja: homa | null; recommendations?: any[] }) {
   const params = useParams<{ slug: string }>();
   const slugParam = params?.slug;
   const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
@@ -176,7 +176,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
     return item[`price${currency}`] ?? item.price ?? 0;
   };
 
-  const [puja, setPuja] = useState<Puja | null>(initialPuja);
+  const [homa, setPuja] = useState<homa | null>(initialPuja);
   const [loading, setLoading] = useState(!initialPuja);
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(initialPuja?.packages?.[0]?.id ?? null);
   const [showPackageModal, setShowPackageModal] = useState(false);
@@ -212,8 +212,8 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
   const scrollTimeoutRef = useRef<any>(null);
   const packagesObserverRef = useRef<IntersectionObserver | null>(null);
 
-  const hasGallery = puja?.gallery && puja.gallery.length > 0;
-  const images = hasGallery ? [puja!.imageUrl, ...puja!.gallery!] : [puja?.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=800&q=80"];
+  const hasGallery = homa?.gallery && homa.gallery.length > 0;
+  const images = hasGallery ? [homa!.imageUrl, ...homa!.gallery!] : [homa?.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=800&q=80"];
 
   const handleNextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -236,8 +236,8 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
         }
       }
 
-      // Product ID from puja, fallback to 10
-      const productId = puja?.productId || 10;
+      // Product ID from homa, fallback to 10
+      const productId = homa?.productId || 10;
 
       const cartRes = await fetch('/api/cart/add', {
         method: 'POST',
@@ -334,11 +334,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
     return () => carousel.removeEventListener('scroll', handleCarouselScroll);
   }, []);
 
-  const extrasTotal = (puja?.offerings || [])
+  const extrasTotal = (homa?.offerings || [])
     .filter(o => selectedExtraIds.includes(o.id))
     .reduce((sum, o) => sum + getDisplayPrice(o), 0);
 
-  const selectedPackage = puja?.packages?.find((pkg) => pkg.id === selectedPackageId) ?? puja?.packages?.[0] ?? null;
+  const selectedPackage = homa?.packages?.find((pkg) => pkg.id === selectedPackageId) ?? homa?.packages?.[0] ?? null;
   const pkgPrice = selectedPackage ? getDisplayPrice(selectedPackage) : 0;
   const highPrice = selectedPackage ? Math.round(pkgPrice * 1.2) : null;
   const totalAmount = Math.max(0, pkgPrice + extrasTotal - couponDiscount);
@@ -371,14 +371,14 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
   };
 
   const defaultSectionOrder = ["about", "benefits", "process", "temple", "packages", "reviews", "faqs", "recommendations"];
-  let currentSectionOrder = puja?.sectionOrder && puja.sectionOrder.length > 0 ? [...puja.sectionOrder] : [...defaultSectionOrder];
+  let currentSectionOrder = homa?.sectionOrder && homa.sectionOrder.length > 0 ? [...homa.sectionOrder] : [...defaultSectionOrder];
 
   if (recommendations && recommendations.length > 0 && !currentSectionOrder.includes("recommendations")) {
     currentSectionOrder.push("recommendations");
   }
 
   const allSectionTabs: Record<string, { id: string; label: string }> = {
-    about: { id: "about", label: "About Puja" },
+    about: { id: "about", label: "About homa" },
     benefits: { id: "benefits", label: "Benefits" },
     process: { id: "process", label: "Process" },
     temple: { id: "temple", label: "Temple Details" },
@@ -405,13 +405,13 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
           return;
         }
 
-        const res = await fetch(`/api/puja?slug=${slug}`);
+        const res = await fetch(`/api/homa?slug=${slug}`);
         if (!res.ok) {
           setPuja(null);
           return;
         }
 
-        const data: Puja = await res.json();
+        const data: homa = await res.json();
         setPuja(data);
         setSelectedPackageId(data.packages?.[0]?.id ?? null);
       } catch {
@@ -425,12 +425,12 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
   }, [slug, initialPuja]);
 
   useEffect(() => {
-    if (!puja) {
+    if (!homa) {
       setCountdown(defaultCountdown);
       return;
     }
 
-    const target = parseEventDate(puja.eventDateTime) || parseEventDate(puja.date);
+    const target = parseEventDate(homa.eventDateTime) || parseEventDate(homa.date);
     if (!target) {
       setCountdown(defaultCountdown);
       return;
@@ -442,7 +442,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [puja]);
+  }, [homa]);
 
   // Fetch approved reviews from DB
   useEffect(() => {
@@ -482,7 +482,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
+
     // Intersection Observer for mobile floating button
     const packageSection = document.getElementById("packages");
     if (packageSection) {
@@ -505,7 +505,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
   const [reviewLoading, setReviewLoading] = useState(false);
 
   // ── Review Booking: render as a REAL FULL PAGE (early return, not a popup) ──
-  if (showReviewModal && puja) {
+  if (showReviewModal && homa) {
     return (
       <div className="min-h-screen bg-[#f8f9fa] pb-32">
         {/* Hide site footer & AI chat while in review booking mode */}
@@ -591,7 +591,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               </div>
 
               {/* Extra Selected Offerings */}
-              {(puja?.offerings || []).filter(o => selectedExtraIds.includes(o.id)).map(extra => (
+              {(homa?.offerings || []).filter(o => selectedExtraIds.includes(o.id)).map(extra => (
                 <div key={extra.id} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex justify-between items-center group">
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 bg-gray-50 rounded-xl overflow-hidden">
@@ -688,7 +688,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                     <span>{selectedPackage?.name}</span>
                     <span className="text-gray-900">{currencySymbol} {selectedPackage ? getDisplayPrice(selectedPackage) : 0}.0</span>
                   </div>
-                  {(puja?.offerings || []).filter(o => selectedExtraIds.includes(o.id)).map(extra => (
+                  {(homa?.offerings || []).filter(o => selectedExtraIds.includes(o.id)).map(extra => (
                     <div key={extra.id} className="flex justify-between">
                       <span>{extra.name}</span>
                       <span className="text-gray-900">{currencySymbol} {getDisplayPrice(extra)}.0</span>
@@ -722,7 +722,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                     {agreedToTerms && <div className="absolute h-2.5 w-2.5 rounded-full bg-[#6869F9]"></div>}
                   </div>
                   <p className={`text-[12px] font-medium leading-relaxed transition-colors ${agreedToTerms ? 'text-[#6869F9]' : 'text-gray-600'}`}>
-                    I agree to the Terms of Service. My Puja will be conducted with full vedic rites as per the selected package and offerings.
+                    I agree to the Terms of Service. My homa will be conducted with full vedic rites as per the selected package and offerings.
                   </p>
                 </div>
               </div>
@@ -754,7 +754,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                       let localCartId = shoppingCartId || "";
 
                       // Add selected offerings to cart
-                      const selectedOfferings = (puja.offerings || []).filter(o => selectedExtraIds.includes(o.id));
+                      const selectedOfferings = (homa.offerings || []).filter(o => selectedExtraIds.includes(o.id));
                       if (selectedOfferings.length > 0) {
                         for (const offering of selectedOfferings) {
                           const offProductId = offering.productId || 10;
@@ -789,7 +789,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                       }
 
                       const extras = selectedExtraIds.join(',');
-                      const sankalpUrl = `/sankalp?amount=${totalAmount}&type=puja&pkg=${selectedPackageId}&name=${encodeURIComponent(userDetails.name)}&wa=${userDetails.whatsapp}&extras=${extras}&title=${encodeURIComponent(puja.title)}&slug=${encodeURIComponent(slug || '')}&shoppingCartId=${localCartId}`;
+                      const sankalpUrl = `/sankalp?amount=${totalAmount}&type=homa&pkg=${selectedPackageId}&name=${encodeURIComponent(userDetails.name)}&wa=${userDetails.whatsapp}&extras=${extras}&title=${encodeURIComponent(homa.title)}&slug=${encodeURIComponent(slug || '')}&shoppingCartId=${localCartId}`;
                       if (!authData.authenticated) {
                         setPendingSankalpUrl(sankalpUrl);
                         setShowLoginModal(true);
@@ -820,7 +820,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
 
           {/* Right Column: Upsell */}
           {(() => {
-            const availableExtras = (puja?.offerings || []).filter(o => !selectedExtraIds.includes(o.id));
+            const availableExtras = (homa?.offerings || []).filter(o => !selectedExtraIds.includes(o.id));
             if (availableExtras.length === 0) return null;
             return (
               <div>
@@ -923,12 +923,12 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
       <Navbar />
       <main className="min-h-screen bg-white pb-24">
         {loading ? (
-          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 py-16 sm:py-20 text-center text-[#1f1f1f]">Loading puja details...</div>
-        ) : !puja ? (
+          <div className="mx-auto max-w-[1440px] px-4 sm:px-6 py-16 sm:py-20 text-center text-[#1f1f1f]">Loading homa details...</div>
+        ) : !homa ? (
           <div className="mx-auto max-w-[1440px] px-6 py-20 text-center">
-            <h1 className="text-3xl font-bold text-[#3b0764]">Puja not found</h1>
-            <Link href="/puja" className="mt-6 inline-block rounded-xl bg-[#6869F9] px-6 py-3 text-sm font-semibold text-white">
-              Back to Pujas
+            <h1 className="text-3xl font-bold text-[#3b0764]">homa not found</h1>
+            <Link href="/homa" className="mt-6 inline-block rounded-xl bg-[#6869F9] px-6 py-3 text-sm font-semibold text-white">
+              Back to homas
             </Link>
           </div>
         ) : (
@@ -942,11 +942,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 <svg className="w-3 h-3 text-gray-400 shrink-0 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
-                <Link href="/puja" className="hover:text-gray-800 transition-colors shrink-0 whitespace-nowrap">AstroVed Puja Seva</Link>
+                <Link href="/homa" className="hover:text-gray-800 transition-colors shrink-0 whitespace-nowrap">AstroVed homa Seva</Link>
                 <svg className="w-3 h-3 text-gray-400 shrink-0 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                 </svg>
-                <span className="text-[#1f1f1f] font-bold truncate min-w-0">{puja.title}</span>
+                <span className="text-[#1f1f1f] font-bold truncate min-w-0">{homa.title}</span>
               </div>
             </nav>
 
@@ -955,13 +955,13 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr]">
                 {/* Left: Image Carousel */}
                 <div className="relative overflow-hidden rounded-2xl group cursor-pointer" onClick={() => setShowGallery(true)}>
-                  <img src={images[currentImageIndex]} alt={puja.title} className="h-[240px] sm:h-[320px] md:h-[400px] lg:h-[450px] w-full object-cover object-center transition-opacity duration-300" />
+                  <img src={images[currentImageIndex]} alt={homa.title} className="h-[240px] sm:h-[320px] md:h-[400px] lg:h-[450px] w-full object-cover object-center transition-opacity duration-300" />
 
                   {/* Top Left Badge */}
-                  {puja.badge && (
+                  {homa.badge && (
                     <div className="absolute left-4 top-4">
                       <span className="inline-flex items-center rounded-lg bg-[#ffc107] px-4 py-1.5 text-[13px] font-bold text-[#1f1f1f] shadow-sm">
-                        {puja.badge}
+                        {homa.badge}
                       </span>
                     </div>
                   )}
@@ -993,32 +993,32 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 {/* Right: Details panel */}
                 <div className="flex flex-col justify-center">
                   <p className="text-[#6869F9] text-[11px] font-bold uppercase tracking-widest mb-2">
-                    {puja.subtitle || "SPECIAL PUJA & YAGYA"}
+                    {homa.subtitle || "SPECIAL homa & YAGYA"}
                   </p>
 
                   <h1 className="text-[22px] md:text-[26px] font-bold leading-snug text-[#1f1f1f] mb-3">
-                    {puja.title}
+                    {homa.title}
                   </h1>
 
                   <p className="text-[15px] font-medium text-gray-600 mb-5 leading-relaxed">
-                    {puja.description || "Join us for this sacred ritual to seek divine blessings."}
+                    {homa.description || "Join us for this sacred ritual to seek divine blessings."}
                   </p>
 
                   <div className="flex flex-col gap-2.5 mb-5">
                     <div className="flex items-start gap-2.5 text-[13px] text-gray-500 font-medium">
                       <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                      <span className="leading-tight">{puja.location || puja.details?.templeLocation || "Sacred Temple, India"}</span>
+                      <span className="leading-tight">{homa.location || homa.details?.templeLocation || "Sacred Temple, India"}</span>
                     </div>
                     <div className="flex items-start gap-2.5 text-[13px] text-gray-500 font-medium">
                       <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                      <span className="leading-tight">{puja.date || "Upcoming Auspicious Date"}</span>
+                      <span className="leading-tight">{homa.date || "Upcoming Auspicious Date"}</span>
                     </div>
                   </div>
 
                   {/* Countdown */}
                   {!countdown.expired && (
                     <div className="mb-5 border-t border-gray-100 pt-4">
-                      <p className="text-[13px] font-bold text-[#1f1f1f] mb-2">Puja booking will close in :</p>
+                      <p className="text-[13px] font-bold text-[#1f1f1f] mb-2">homa booking will close in :</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-[22px] font-bold text-[#6869F9]">{String(countdown.days)}</span>
                         <span className="text-[11px] font-medium text-[#6869F9] uppercase mr-2">Day</span>
@@ -1036,7 +1036,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                   )}
                   {countdown.expired && (
                     <p className="mb-5 rounded-lg bg-red-50 px-4 py-2 text-xs font-semibold text-red-600">
-                      This puja has already been conducted.
+                      This homa has already been conducted.
                     </p>
                   )}
 
@@ -1055,20 +1055,20 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                   </div>
 
                   <p className="text-[13px] text-gray-500 leading-relaxed mb-6">
-                    Till now <span className="font-bold text-[#6869F9]">3,00,000+ Devotees</span> have participated in Pujas conducted by AstroVed Puja Seva.
+                    Till now <span className="font-bold text-[#6869F9]">3,00,000+ Devotees</span> have participated in homas conducted by AstroVed homa Seva.
                   </p>
 
                   {/* CTA */}
                   {countdown.expired ? (
                     <button disabled className="hidden md:flex w-full items-center justify-center rounded-lg bg-gray-300 py-3.5 text-[16px] font-bold text-white cursor-not-allowed">
-                      Puja is Over
+                      homa is Over
                     </button>
                   ) : (
                     <button
                       onClick={() => setShowPackageModal(true)}
                       className="hidden md:flex w-full items-center justify-center gap-2 rounded-lg bg-[#6869F9] py-3.5 text-[16px] font-bold text-white hover:bg-[#6869F9] transition-colors"
                     >
-                      Select puja package
+                      Select homa package
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                       </svg>
@@ -1126,10 +1126,10 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                     <section id="about" key="about" className="border-b border-gray-100 pb-8 sm:pb-10">
                       <h2 className="flex items-start gap-3 text-[20px] sm:text-[24px] font-bold text-[#1f1f1f] leading-snug">
                         <SparklesIcon className="mt-1 h-7 w-7 shrink-0 text-[#6869F9]" />
-                        <span>{puja.details?.heroTitle || "Sacred Havan for victory and peace."}</span>
+                        <span>{homa.details?.heroTitle || "Sacred Havan for victory and peace."}</span>
                       </h2>
                       <div className="mt-6 space-y-6 text-[16px] leading-[1.9] text-gray-700">
-                        <p>{puja.details.about || "In Sanatan Dharma, this puja is highly powerful for pacifying negative energies."}</p>
+                        <p>{homa.details.about || "In Sanatan Dharma, this homa is highly powerful for pacifying negative energies."}</p>
 
                         <div className="space-y-2">
                           <p className="font-bold text-gray-900 text-[17px] flex items-center gap-2"><BuildingLibraryIcon className="h-5 w-5 text-[#a78bfa]" /> Significance of Temple</p>
@@ -1138,7 +1138,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
 
                         <div className="space-y-2">
                           <p className="font-bold text-gray-900 text-[17px] flex items-center gap-2"><FireIcon className="h-5 w-5 text-[#a78bfa]" /> Significance of this Havan</p>
-                          <p>The main highlight of this puja is the special havan performed. It represents the burning away of obstacles.</p>
+                          <p>The main highlight of this homa is the special havan performed. It represents the burning away of obstacles.</p>
                         </div>
                       </div>
                     </section>
@@ -1148,9 +1148,9 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 if (sectionId === "benefits") {
                   return (
                     <section id="benefits" key="benefits" className="border-b border-gray-100 py-8 sm:py-10">
-                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#1f1f1f]">Puja Benefits</h2>
+                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#1f1f1f]">homa Benefits</h2>
                       <div className="mt-6 sm:mt-8 grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        {puja.details.benefits.map((b, idx) => (
+                        {homa.details.benefits.map((b, idx) => (
                           <div key={`benefit-${idx}`} className="flex gap-4">
                             <div className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-full bg-[#ede9fe] text-[#6869F9] text-xl">
                               {(() => {
@@ -1173,11 +1173,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 if (sectionId === "process") {
                   return (
                     <section id="process" key="process" className="border-b border-gray-100 py-8 sm:py-10">
-                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#1f1f1f]">Puja Process</h2>
+                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#1f1f1f]">homa Process</h2>
                       <div className="mt-6 sm:mt-8 grid gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                        {puja.details.process.map((step, idx) => (
+                        {homa.details.process.map((step, idx) => (
                           <div key={`process-${idx}`} className="flex gap-3 items-start">
-                            <div 
+                            <div
                               className="flex h-6 w-8 shrink-0 items-center justify-center bg-[#6869F9] text-[13px] font-bold text-white shadow-sm pr-1 mt-0.5"
                               style={{ clipPath: 'polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)' }}
                             >
@@ -1197,12 +1197,12 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 if (sectionId === "temple") {
                   return (
                     <section id="temple" key="temple" className="border-b border-gray-100 py-8 sm:py-10">
-                      <h2 className="text-[18px] sm:text-[24px] font-bold text-gray-900 leading-snug">{puja.details.templeName}, {puja.details.templeLocation}</h2>
+                      <h2 className="text-[18px] sm:text-[24px] font-bold text-gray-900 leading-snug">{homa.details.templeName}, {homa.details.templeLocation}</h2>
                       <div className="mt-6 grid gap-6 sm:gap-8 lg:grid-cols-[1fr_1.5fr]">
-                        <img src={puja.imageUrl} alt={puja.details.templeName} className="h-48 sm:h-64 w-full rounded-2xl object-cover shadow-sm" />
+                        <img src={homa.imageUrl} alt={homa.details.templeName} className="h-48 sm:h-64 w-full rounded-2xl object-cover shadow-sm" />
                         <div className="space-y-4 text-[16px] leading-[1.9] text-gray-700 text-justify">
-                          <p>{puja.details.templeNote || "This temple is known for powerful prosperity rituals and ancient worship traditions."}</p>
-                          <p>{puja.details.about}</p>
+                          <p>{homa.details.templeNote || "This temple is known for powerful prosperity rituals and ancient worship traditions."}</p>
+                          <p>{homa.details.about}</p>
                           <p>Devotees believe prayers offered here remove obstacles, invite abundance, and support career, finance, and family harmony.</p>
                         </div>
                       </div>
@@ -1215,9 +1215,9 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                     <React.Fragment key="packages">
                       {/* -- All Packages Includes -- */}
                       <section className="border-b border-gray-100 py-8 sm:py-10">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">All Puja Packages includes</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">All homa Packages includes</h2>
                         <div className="mt-6 grid gap-3 sm:gap-4 sm:grid-cols-2">
-                          {puja.details.inclusions.map((item, idx) => (
+                          {homa.details.inclusions.map((item, idx) => (
                             <div key={`incl-${idx}`} className="flex items-start gap-3">
                               <div className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#f8f7ff] border border-[#6869F9]/20">
                                 <CheckIcon className="h-3 w-3 text-[#1f1f1f]" />
@@ -1234,10 +1234,10 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
 
                       {/* -- Package Selection -- */}
                       <section id="packages" className="border-b border-gray-100 py-8 sm:py-10">
-                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Select your puja package</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Select your homa package</h2>
                         {/* Desktop Package Grid — 4-column with themed colors */}
                         <div className="hidden md:grid mt-6 sm:mt-8 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                          {puja.packages.map((pkg, idx) => {
+                          {homa.packages.map((pkg, idx) => {
                             const isSelected = selectedPackage?.id === pkg.id;
                             const themes = [
                               { border: "#d95a2b", priceColor: "#d95a2b", badgeBg: "#FFF0E0", badgeText: "#C25000", radioBg: "#d95a2b", cardBg: "#fffaf8" },
@@ -1293,7 +1293,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                       </div>
                                     </div>
                                     <img
-                                      src={pkg.imageUrl || puja.imageUrl}
+                                      src={pkg.imageUrl || homa.imageUrl}
                                       alt={pkg.name}
                                       className="h-20 w-20 shrink-0 rounded-xl object-cover object-top shadow-sm"
                                     />
@@ -1306,16 +1306,16 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                             );
                           })}
                         </div>
-                        
+
                         {/* Mobile Package Grid */}
                         <div className="flex md:hidden flex-col gap-4 mt-6">
-                          {puja.packages.map((pkg, idx) => {
+                          {homa.packages.map((pkg, idx) => {
                             const isSelected = selectedPackage?.id === pkg.id;
                             const badgeLabel = PERSON_LABELS[idx] ?? `${idx + 1} Person`;
                             const personColor = idx === 0 ? "bg-[#d95a2b] text-white" : (idx === 1 ? "bg-[#fce4eb] text-[#a51d4e]" : "bg-[#f0f4eb] text-[#3c5a14]");
-                            
+
                             return (
-                              <div 
+                              <div
                                 key={`pkg-mob-${pkg.id}`}
                                 onClick={() => setSelectedPackageId(pkg.id)}
                                 className={`rounded-xl border ${isSelected ? "border-[#d95a2b] bg-[#fffaf8]" : "border-gray-200 bg-white"} overflow-hidden transition-all duration-300 relative cursor-pointer shadow-sm`}
@@ -1324,13 +1324,13 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                   {/* Left side: Image + Tag */}
                                   <div className="flex flex-col items-center w-[84px] shrink-0">
                                     <div className="w-full aspect-square rounded-lg overflow-hidden relative">
-                                      <img src={pkg.imageUrl || puja.imageUrl} className="w-full h-full object-cover" alt={pkg.name} />
+                                      <img src={pkg.imageUrl || homa.imageUrl} className="w-full h-full object-cover" alt={pkg.name} />
                                     </div>
                                     <div className={`mt-2 text-[10px] font-bold px-2 py-1 rounded flex items-center justify-center whitespace-nowrap w-full ${personColor}`}>
                                       <i className="fa-regular fa-user text-[9px] mr-1"></i> {badgeLabel}
                                     </div>
                                   </div>
-                                  
+
                                   {/* Right side: Text + Radio */}
                                   <div className="flex-1 flex flex-col justify-center">
                                     <div className="flex justify-between items-start">
@@ -1347,11 +1347,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                     <p className="text-[16px] text-[#d95a2b] font-medium mt-1">{currencySymbol}{getDisplayPrice(pkg)}</p>
                                   </div>
                                 </div>
-                                
+
                                 {/* Participate Button for Active Package */}
                                 {isSelected && (
                                   <div className="px-4 pb-4 pt-1">
-                                    <button 
+                                    <button
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         if (selectedPackageId) {
@@ -1380,7 +1380,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                             <div className="mt-3 space-y-2">
                               <div className="flex items-start gap-2">
                                 <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#5b21b6]" />
-                                <p className="text-xs leading-5 text-gray-600">Our temple Pandit Ji recommends this package as the sacred puja invokes powerful blessings.</p>
+                                <p className="text-xs leading-5 text-gray-600">Our temple Pandit Ji recommends this package as the sacred homa invokes powerful blessings.</p>
                               </div>
                               <div className="flex items-start gap-2">
                                 <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#5b21b6]" />
@@ -1403,7 +1403,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                 <i className="fa-solid fa-shield mr-1"></i> No Hidden Cost
                               </Marquee>
                             </div>
-                            <button 
+                            <button
                               onClick={() => {
                                 if (selectedPackageId) {
                                   if (isIndian) {
@@ -1511,7 +1511,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                       <section id="faqs" className="py-8 sm:py-10 border-b border-gray-100">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Frequently Asked Questions</h2>
                         <div className="mt-6 divide-y divide-gray-100">
-                          {puja.details.faq.map((item, idx) => (
+                          {homa.details.faq.map((item, idx) => (
                             <details key={`faq-${idx}`} className="group py-5">
                               <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-bold text-gray-900">
                                 {item.question}
@@ -1527,7 +1527,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                       {textReviews.length > 0 && (
                         <section className="py-10">
                           <h3 className="text-xl font-bold text-gray-900">User Reviews</h3>
-                          <p className="mt-1 text-sm text-gray-500">Reviews from our devotees who booked Puja with us</p>
+                          <p className="mt-1 text-sm text-gray-500">Reviews from our devotees who booked homa with us</p>
 
                           <div className="mt-6 space-y-4">
                             {userReviewsList.map((review, idx) => (
@@ -1599,7 +1599,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                 </div>
                                 <div className="mt-4 flex items-center justify-between">
                                   <div className="font-bold text-gray-900">₹{rec.packages?.[0]?.priceINR || rec.packages?.[0]?.price || '516'}</div>
-                                  <Link href={`/homa/${rec.slug}`} className="bg-[#009e5b] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-[#008c51]">
+                                  <Link href={`/puja/${rec.slug}`} className="bg-[#009e5b] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-[#008c51]">
                                     BOOK NOW
                                   </Link>
                                 </div>
@@ -1623,7 +1623,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
       </main>
 
       {/* Package Selection Modal */}
-      {showPackageModal && puja && (
+      {showPackageModal && homa && (
         <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4 backdrop-blur-sm">
           <div className="relative flex h-[92vh] sm:h-full max-h-[92vh] sm:max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl bg-white shadow-2xl">
             {/* Close Button */}
@@ -1636,14 +1636,14 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto pt-10 sm:pt-12">
 
-              {/* All Puja Packages includes */}
+              {/* All homa Packages includes */}
               <div className="px-4 sm:px-6 mb-6">
-                <h2 className="text-[20px] font-bold text-[#1f1f1f] mb-4">All Puja Packages includes</h2>
+                <h2 className="text-[20px] font-bold text-[#1f1f1f] mb-4">All homa Packages includes</h2>
                 <div className="space-y-3 mb-5">
                   {[
-                    "The participant's name and gotra will be recited by an experienced Panditji during the puja.",
-                    "Participants will receive guided mantras and step-by-step instructions to join the puja from home.",
-                    "A complete video of the puja and offerings will be shared on your WhatsApp.",
+                    "The participant's name and gotra will be recited by an experienced Panditji during the homa.",
+                    "Participants will receive guided mantras and step-by-step instructions to join the homa from home.",
+                    "A complete video of the homa and offerings will be shared on your WhatsApp.",
                     "A free Aashirwad Box with Tirth Prasad will be delivered to your home if you opt in to receive it."
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-start gap-3">
@@ -1661,18 +1661,18 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               </div>
 
               <div className="px-4 sm:px-6 mb-4">
-                <h3 className="text-[17px] font-bold text-[#1f1f1f]">Select your puja package</h3>
+                <h3 className="text-[17px] font-bold text-[#1f1f1f]">Select your homa package</h3>
               </div>
 
 
               {/* ── MOBILE: Vertical Card List with per-package theme colors ── */}
               <div className="md:hidden flex flex-col gap-3 px-4">
                 {(() => {
-                  const displayPackages = [...puja.packages];
+                  const displayPackages = [...homa.packages];
                   if (displayPackages.length === 3) {
                     displayPackages.push({
                       id: 'family-bhog',
-                      name: 'Family Puja + Bhog',
+                      name: 'Family homa + Bhog',
                       price: Math.round((displayPackages[2]?.price || 1000) * 1.5),
                       description: 'Family sankalp with bhog offering and temple archana included.'
                     });
@@ -1717,7 +1717,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                     const theme = themes[idx] || themes[0];
                     const personLabel = personLabels[idx] || "1 Person";
                     const personSubtitle = pkg.description || personSubtitles[idx] || "Package";
-                    const imageUrl = pkg.imageUrl || puja.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=150&q=80";
+                    const imageUrl = pkg.imageUrl || homa.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=150&q=80";
 
                     return (
                       <div
@@ -1742,9 +1742,9 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                             {/* Person badge under the image */}
                             <div
                               className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[11px] font-bold transition-colors"
-                              style={{ 
-                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg, 
-                                color: isSelected ? "#ffffff" : theme.badgeText 
+                              style={{
+                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg,
+                                color: isSelected ? "#ffffff" : theme.badgeText
                               }}
                             >
                               <i className="fa-solid fa-user text-[10px]"></i>
@@ -1787,11 +1787,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               <div className="hidden md:block px-6 pb-2">
                 <div className="grid grid-cols-4 gap-3">
                   {(() => {
-                    const displayPackages = [...puja.packages];
+                    const displayPackages = [...homa.packages];
                     if (displayPackages.length === 3) {
                       displayPackages.push({
                         id: 'family-bhog',
-                        name: 'Family Puja + Bhog',
+                        name: 'Family homa + Bhog',
                         price: Math.round((displayPackages[2]?.price || 1000) * 1.5),
                         description: 'Family sankalp with bhog offering and temple archana included.'
                       });
@@ -1818,12 +1818,12 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                         radioBg: "#836814", participateBg: "#836814", cardBg: "#FDFAF2",
                       },
                     ];
-                    
+
                     return displayPackages.map((pkg, idx) => {
                       const isSelected = selectedPackageId === pkg.id;
                       const theme = themes[idx] || themes[0];
                       const personLabel = idx === 0 ? "1 Person" : idx === 1 ? "2 Person" : idx === 2 ? "4 Person" : "6 Person";
-                      const imageUrl = pkg.imageUrl || puja.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=150&q=80";
+                      const imageUrl = pkg.imageUrl || homa.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=150&q=80";
 
                       return (
                         <button
@@ -1837,17 +1837,17 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                         >
                           {/* Top row: person badge + radio */}
                           <div className="flex items-center justify-between w-full mb-2">
-                            <span 
+                            <span
                               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors"
-                              style={{ 
-                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg, 
-                                color: isSelected ? "#ffffff" : theme.badgeText 
+                              style={{
+                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg,
+                                color: isSelected ? "#ffffff" : theme.badgeText
                               }}
                             >
                               <i className="fa-solid fa-user text-[9px]"></i>
                               {personLabel}
                             </span>
-                            <div 
+                            <div
                               className="h-[22px] w-[22px] rounded-full flex items-center justify-center transition-colors"
                               style={{
                                 border: isSelected ? 'none' : '1px solid #d1d5db',
@@ -1862,7 +1862,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                           <h4 className="text-[14px] font-bold text-[#1f1f1f] leading-snug w-[65%] z-10 mt-1">{pkg.name}</h4>
 
                           {/* Price */}
-                          <span 
+                          <span
                             className="mt-auto text-[18px] font-black z-10"
                             style={{ color: isSelected ? theme.priceColor : "#1f1f1f" }}
                           >
@@ -1941,7 +1941,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
       )}
 
       {/* Details Collection Modal */}
-      {showDetailsModal && puja && (
+      {showDetailsModal && homa && (
         <div className="fixed inset-0 z-110 flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4 backdrop-blur-sm">
           <div className="relative w-full sm:max-w-md rounded-t-[32px] sm:rounded-[32px] bg-white p-5 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto">
             {/* Header */}
@@ -1955,7 +1955,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               >
                 <ArrowLeftIcon className="h-5 w-5 text-gray-900" />
               </button>
-              <h3 className="text-xl font-bold text-gray-900">Fill your details for Puja</h3>
+              <h3 className="text-xl font-bold text-gray-900">Fill your details for homa</h3>
             </div>
 
             <div className="space-y-8">
@@ -1963,7 +1963,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
               {isIndian && (
                 <div>
                   <label className="block text-gray-900 font-bold text-sm mb-2">Enter Your Whatsapp Mobile Number</label>
-                  <p className="text-[11px] text-gray-400 mb-4 leading-relaxed font-medium">Your Puja booking updates like Puja Photos, Videos and other details will be sent on WhatsApp on below number.</p>
+                  <p className="text-[11px] text-gray-400 mb-4 leading-relaxed font-medium">Your homa booking updates like homa Photos, Videos and other details will be sent on WhatsApp on below number.</p>
                   <div className="relative group">
                     <div className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center gap-2 text-[#1f1f1f] font-bold">
                       <i className="fa-brands fa-whatsapp text-lg"></i>
@@ -2045,7 +2045,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
           <div className="flex items-center justify-between p-4 md:p-6 text-white">
             <button onClick={() => setShowGallery(false)} className="flex items-center gap-4 hover:text-gray-300">
               <ArrowLeftIcon className="h-5 w-5" />
-              <span className="font-bold text-lg">Puja Gallery</span>
+              <span className="font-bold text-lg">homa Gallery</span>
             </button>
             <button className="flex items-center gap-2 rounded-full bg-[#1b2b25] px-4 py-2 text-sm font-semibold text-[#48c985] hover:bg-[#253b33] border border-[#253b33]">
               <i className="fa-brands fa-whatsapp"></i> Share
@@ -2097,23 +2097,22 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                 }}
                 className="w-full bg-[#00b268] text-white py-4 rounded-xl font-bold text-[15px] hover:bg-[#009e5c] transition-colors shadow-lg shadow-[#00b268]/20 flex items-center justify-center gap-2"
               >
-                Explore Puja Packages Now <ArrowLeftIcon className="h-4 w-4 rotate-180" />
+                Explore homa Packages Now <ArrowLeftIcon className="h-4 w-4 rotate-180" />
               </button>
             </div>
           </div>
         </div>
       )}
-      {/* Mobile Floating "Select puja package" Bar */}
-      <div 
-        className={`md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-40 transition-transform duration-300 ${
-          isPackagesVisible ? 'translate-y-full' : 'translate-y-0'
-        }`}
+      {/* Mobile Floating "Select homa package" Bar */}
+      <div
+        className={`md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-40 transition-transform duration-300 ${isPackagesVisible ? 'translate-y-full' : 'translate-y-0'
+          }`}
       >
-        <button 
-          onClick={() => setShowPackageModal(true)} 
+        <button
+          onClick={() => setShowPackageModal(true)}
           className="w-full bg-[#00b268] text-white py-3.5 rounded-lg font-bold text-[15px] flex items-center justify-center gap-2 shadow-sm active:bg-[#009e5c] transition-colors"
         >
-          Select puja package 
+          Select homa package
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
