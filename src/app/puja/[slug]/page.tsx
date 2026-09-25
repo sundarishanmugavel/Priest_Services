@@ -3,8 +3,8 @@ import { getPujaBySlug } from '@/lib/pujas';
 import PujaDetailClient from './PujaDetailClient';
 
 type Props = {
-  params: Promise<{ slug: string }> | { slug: string };
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }> | { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata(
