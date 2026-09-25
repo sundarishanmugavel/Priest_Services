@@ -15,67 +15,201 @@ export default function DashboardPage() {
       {/* ── 1. Hero Section ── */}
       <HeroSection />
 
-      {/* ── 2. Steps Section ── */}
-      <section className="py-16 bg-[#faf9f6]">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4a2e21] font-serif">From Booking to Divine Blessings</h2>
-        </div>
-        <div className="max-w-[800px] mx-auto px-4 flex justify-between items-center relative">
-          {/* Connecting Line */}
-          <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-200 -z-10 -translate-y-1/2 border-t-2 border-dashed border-[#d18e7c]"></div>
+      {/* ── 2. Steps Section ── "Your Journey to Divine Blessings" ── */}
+      <section className="py-5 sm:py-6 md:py-7 bg-[#fdfbf7] border-y border-[#f0e4d0] relative overflow-hidden">
+        {/* Background Mandala Watermarks */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-[0.035] bg-center bg-no-repeat bg-contain z-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Ccircle cx='250' cy='250' r='240' fill='none' stroke='%3C%238b1e10' stroke-width='1.5'/%3E%3Ccircle cx='250' cy='250' r='200' fill='none' stroke='%3C%238b1e10' stroke-width='1' stroke-dasharray='4 4'/%3E%3Ccircle cx='250' cy='250' r='160' fill='none' stroke='%3C%238b1e10' stroke-width='1.5'/%3E%3C/svg%3E")`
+          }}
+        />
+
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 relative z-10">
           
-          <Step icon="👆" title="Choose" subtitle="Your Puja" />
-          <Step icon="📝" title="Provide your" subtitle="Name & Gotra" />
-          <Step icon="✓" title="Puja" subtitle="Performed" active />
-          <Step icon="🎥" title="Receive Puja Video" subtitle="& Divine Blessings" />
+          {/* Section Header */}
+          <div className="text-center mb-4 sm:mb-5">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#221f20] tracking-tight">
+              Your Journey to <span className="text-[#8b1e10]">Divine Blessings</span>
+            </h2>
+            
+            {/* Gold Lotus Filigree Divider */}
+            <div className="flex items-center justify-center gap-2 my-1">
+              <div className="w-12 sm:w-20 h-[1px] bg-gradient-to-r from-transparent to-[#c68a36]" />
+              <svg className="w-4 h-4 text-[#c68a36] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C12 2 10.2 5.5 10.2 8C10.2 9.8 11 11.2 12 12C13 11.2 13.8 9.8 13.8 8C13.8 5.5 12 2 12 2Z" />
+                <path d="M12 12C10.2 10.8 7.5 9.8 5.5 10.8C4 11.5 3 12.8 3 14.2C3 16.5 6.5 18 12 18.5C17.5 18 21 16.5 21 14.2C21 12.8 20 11.5 18.5 10.8C16.5 9.8 13.8 10.8 12 12Z" opacity="0.8" />
+              </svg>
+              <div className="w-12 sm:w-20 h-[1px] bg-gradient-to-l from-transparent to-[#c68a36]" />
+            </div>
+
+            <p className="text-stone-600 text-xs sm:text-sm font-medium max-w-xl mx-auto">
+              From choosing your Puja to receiving its sacred moments at your doorstep.
+            </p>
+          </div>
+
+          {/* Process Container */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-1.5 lg:gap-3 relative z-10">
+            
+            {/* Step 1 */}
+            <div className="flex flex-col items-center group text-center flex-1 w-full max-w-[190px]">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 relative mb-1 group-hover:scale-105 transition-all">
+                <Image
+                  src="/images/steo_1.png"
+                  alt="Choose Your Puja"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-serif font-bold text-[#8b1e10] text-sm sm:text-base leading-tight">
+                Choose Your Puja
+              </h3>
+            </div>
+
+            {/* Arrow 1 (Desktop) */}
+            <div className="hidden md:flex text-[#c68a36] shrink-0 mb-5">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center group text-center flex-1 w-full max-w-[190px]">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 relative mb-1 group-hover:scale-105 transition-all">
+                <Image
+                  src="/images/step_2.png"
+                  alt="Share Your Details"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-serif font-bold text-[#8b1e10] text-sm sm:text-base leading-tight">
+                Share Your Details
+              </h3>
+            </div>
+
+            {/* Arrow 2 (Desktop) */}
+            <div className="hidden md:flex text-[#c68a36] shrink-0 mb-5">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center group text-center flex-1 w-full max-w-[190px]">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 relative mb-1 group-hover:scale-105 transition-all">
+                <Image
+                  src="/images/step_3.png"
+                  alt="Puja Is Performed"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-serif font-bold text-[#8b1e10] text-sm sm:text-base leading-tight">
+                Puja Is Performed
+              </h3>
+            </div>
+
+            {/* Arrow 3 (Desktop) */}
+            <div className="hidden md:flex text-[#c68a36] shrink-0 mb-5">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+
+            {/* Step 4 */}
+            <div className="flex flex-col items-center group text-center flex-1 w-full max-w-[190px]">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 relative mb-1 group-hover:scale-105 transition-all">
+                <Image
+                  src="/images/step_4.png"
+                  alt="Receive Divine Blessings"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-serif font-bold text-[#8b1e10] text-sm sm:text-base leading-tight">
+                Receive Divine Blessings
+              </h3>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
       {/* ── 3. Our Pujas Section ── */}
       <section className="py-12 bg-white">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#4a2e21] font-serif">Our Pujas</h2>
-            <div className="flex bg-gray-100 rounded-full p-1">
-              <FilterBtn text="All" active />
-              <FilterBtn text="Puja" />
-              <FilterBtn text="Sevas" />
-              <FilterBtn text="Rituals" />
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
+          
+          {/* Header Row & Category Filters */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#221f20] font-serif">
+              Our Pujas
+            </h2>
+            
+            {/* Filter Pills */}
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <button className="bg-[#00b050] text-white font-bold px-5 py-2 rounded-full text-xs sm:text-sm shadow-sm hover:bg-[#009b46] transition-colors">
+                All
+              </button>
+              
+              <button className="bg-white border border-stone-200 text-stone-700 hover:border-stone-400 font-semibold px-4.5 py-2 rounded-full text-xs sm:text-sm transition-colors">
+                Diety
+              </button>
+
+              <button className="bg-white border border-stone-200 text-stone-700 hover:border-stone-400 font-semibold px-4.5 py-2 rounded-full text-xs sm:text-sm transition-colors">
+                Dosha
+              </button>
+
+              <button className="bg-white border border-stone-200 text-stone-700 hover:border-stone-400 font-semibold px-4.5 py-2 rounded-full text-xs sm:text-sm transition-colors">
+                Benefit
+              </button>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* 3 Puja Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            
             {/* Card 1 */}
             <PujaCard 
-              imageTitle="Shri Subrahmanya Swamy Abhishekam" 
-              title="Subrahmanya Swamy Puja & Oil Abhishekam"
-              location="Aadi Murugan Devasthana"
-              date="Saturday, 21 September"
-              oldPrice="₹516"
+              imageSrc="/subrahmanya_swamy_hero.png"
+              topTag="SPECIAL TUESDAY SANKALPAM" 
+              title="Subrahmanya Swamy Abhishekam at Madurai..."
+              subtitle="A special Tuesday Abhishekam for devotees seeking the courage to overcome obstacles, fulfillment of efforts, and success"
+              location="Aadi Meenakshi Sameta Sundareshwarar Temple"
+              date="Saturday, 26 September"
               price="₹516"
+              slug="subrahmanya-swamy-abhishekam"
             />
+
             {/* Card 2 */}
             <PujaCard 
-              imageTitle="Sade Sati Shanti Puja" 
-              title="Sade Sati Shanti Puja & Oil Abhishekam"
-              location="Mangala Shaneeshwara"
-              date="Saturday, 21 September"
-              oldPrice="₹816"
+              imageSrc="/shani_statue_hero_banner.png"
+              topTag="SPEICAL SHANI POOJA" 
+              title="Sade Sati Shanti Puja & Oil Abhishekam ..."
+              subtitle="Shani Shanti Puja & Oil Abhishekam for Relief from the Harsh Effects of Sade Sati"
+              location="Bannanje Shani kshetram"
+              date="Saturday, 26 September"
               price="₹816"
+              slug="sade-sati-shani-shanti-puja"
             />
+
             {/* Card 3 */}
             <PujaCard 
-              imageTitle="Shani Shanti Puja" 
-              title="Shani Shanti Puja for Prosperity"
-              location="Navagraha Devasthanam"
-              date="Saturday, 21 September"
-              oldPrice="₹816"
+              imageSrc="/images/Navagraha-Shanti-Puja.jpg"
+              topTag="SHANI PURNIMA SPECIAL" 
+              title="Shani Shanti Puja for Prosperity, Career..."
+              subtitle="Perform Shani Shanti Puja for relief from hardships, prosperity, career growth, peace and lasting stability."
+              location="Mangala Shaneeshwara Devalayam"
+              date="Saturday, 26 September"
               price="₹816"
+              slug="shani-shanti-puja-prosperity"
             />
+
           </div>
           
           <div className="text-center mt-10">
-            <button className="text-[#009e5b] font-bold px-6 py-2 rounded-full border-2 border-[#009e5b] hover:bg-green-50 transition-colors">
+            <button className="text-[#00b050] font-extrabold px-8 py-3 rounded-full border-2 border-[#00b050] hover:bg-green-50 active:scale-95 transition-all text-base shadow-sm">
               View All Pujas
             </button>
           </div>
@@ -83,24 +217,36 @@ export default function DashboardPage() {
       </section>
 
       {/* ── 4. Puja Gallery Section ── */}
-      <section className="py-16 bg-[#faf9f6]">
-        <div className="max-w-[1200px] mx-auto px-4 text-center">
-          <h2 className="text-[120px] font-bold text-gray-200/50 uppercase tracking-widest -mb-16 pointer-events-none select-none font-serif relative z-0">
-            Puja Gallery
-          </h2>
-          <div className="relative z-10 flex gap-4 overflow-hidden h-[300px] items-center justify-center">
-            {/* Placeholder rectangles to mimic the gallery layout */}
-            <div className="w-[200px] h-[200px] bg-[#e5e5e5] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
-            <div className="w-[150px] h-[250px] bg-[#d5d5d5] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
-            <div className="w-[250px] h-[220px] bg-[#dbdbdb] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
-            <div className="w-[180px] h-[180px] bg-[#ececec] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
-            <div className="w-[220px] h-[240px] bg-[#e8e8e8] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+      <section className="py-16 sm:py-20 bg-[#faf9f6] relative overflow-hidden">
+        {/* Background Typography */}
+        <h2 className="text-[70px] sm:text-[110px] md:text-[145px] lg:text-[170px] font-bold text-stone-900/[0.04] font-serif uppercase tracking-widest text-center select-none pointer-events-none whitespace-nowrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+          Puja Gallery
+        </h2>
+
+        {/* Marquee Row Container with Gradient Mask Edges */}
+        <div className="relative z-10 overflow-hidden w-full py-4 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-16 sm:before:w-28 before:bg-gradient-to-r before:from-[#faf9f6] before:to-transparent before:z-20 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-16 sm:after:w-28 after:bg-gradient-to-l after:from-[#faf9f6] after:to-transparent after:z-20">
+          <div className="flex animate-marquee gap-4 sm:gap-6 items-center">
+            {/* Repeat list twice for continuous infinite marquee */}
+            {[...galleryImages, ...galleryImages].map((img, idx) => (
+              <div 
+                key={idx} 
+                className={`relative shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden shadow-md border border-stone-200/80 group cursor-pointer transition-transform duration-300 hover:scale-[1.02] ${img.aspect}`}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  className="object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ── 5. Trust Badges Strip ── */}
-      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-[#f0f8f1] px-4 py-8 border-y border-green-100">
+      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-[#f0f8f1] px-6 sm:px-10 lg:px-12 py-8 border-y border-green-100">
         <Badge icon="🎥" text="Puja Video Delivered Within 48 hours" />
         <Badge icon="✓" text="Verified & Experienced Pandits" />
         <Badge icon="🏛" text="Puja Performed in Sacred Temples" />
@@ -109,7 +255,7 @@ export default function DashboardPage() {
 
       {/* ── 6. FAQ Section ── */}
       <section className="py-16 bg-white">
-        <div className="max-w-[1200px] mx-auto px-4 flex flex-col md:flex-row gap-12">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 flex flex-col md:flex-row gap-12">
           {/* Left: Doubts */}
           <div className="md:w-1/3">
             <h3 className="text-red-500 font-bold text-sm tracking-wider uppercase mb-2">— FAQ</h3>
@@ -208,7 +354,50 @@ export default function DashboardPage() {
   );
 }
 
-// --- Helper Components ---
+// --- Helper Data & Components ---
+
+const galleryImages = [
+  {
+    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja.jpg",
+    alt: "Purohit Sankalpam Ritual",
+    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
+  },
+  {
+    src: "/images/Service images/Maha Ganapati Homam/Maha-Ganapati-Homam.jpg",
+    alt: "Maha Ganapati Homam Fire",
+    aspect: "w-[210px] sm:w-[250px] h-[190px] sm:h-[220px]",
+  },
+  {
+    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam.jpg",
+    alt: "Vedic Priest at Puja Altar",
+    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
+  },
+  {
+    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja1.jpg",
+    alt: "Shiva Lingam Sacred Abhishekam",
+    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
+  },
+  {
+    src: "/images/Service images/Mangal Dosha Nivaran Puja/Mangal-Dosha-Nivaran-Puja.jpg",
+    alt: "Deity Flower Garland Floral Ritual",
+    aspect: "w-[210px] sm:w-[250px] h-[190px] sm:h-[220px]",
+  },
+  {
+    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam1.jpg",
+    alt: "Vedic Altar Sacred Decoration",
+    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
+  },
+  {
+    src: "/images/Service images/Satyanarayan Katha Puja/Satyanarayan-Katha-Puja.jpg",
+    alt: "Temple Pandits Sacred Fire Ceremony",
+    aspect: "w-[220px] sm:w-[260px] h-[190px] sm:h-[220px]",
+  },
+  {
+    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja2.jpg",
+    alt: "Sacred Aarathi Ritual",
+    aspect: "w-[180px] sm:w-[220px] h-[240px] sm:h-[270px]",
+  },
+];
 
 function Badge({ icon, text }: { icon: string; text: string }) {
   return (
@@ -240,44 +429,113 @@ function FilterBtn({ text, active }: { text: string; active?: boolean }) {
   );
 }
 
-function PujaCard({ imageTitle, title, location, date, price, oldPrice }: any) {
+function PujaCard({ imageSrc, topTag, title, subtitle, location, date, price, slug }: any) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow overflow-hidden flex flex-col group relative">
-      <div className="h-[200px] bg-gradient-to-br from-[#5b2424] to-[#260e0e] relative p-4 flex items-center justify-center border-b-4 border-yellow-500">
-        <span className="absolute top-3 left-3 bg-red-700 text-white text-[10px] font-bold px-2 py-0.5 rounded border border-red-500 z-10 shadow-sm">Shani Pournami Special</span>
-        <div className="absolute top-3 right-3 bg-white/20 p-1.5 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/40 transition-colors">
-          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        </div>
-        <h3 className="text-yellow-400 font-serif font-bold text-center text-xl relative z-10 px-8 leading-tight">{imageTitle}</h3>
-        {/* Decorative circle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140px] h-[140px] border border-yellow-500/20 rounded-full"></div>
-      </div>
+    <div className="bg-white rounded-3xl border border-stone-200/80 p-2.5 sm:p-3 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group text-left">
       
-      <div className="p-5 flex flex-col flex-1">
-        <h4 className="text-lg font-bold text-[#4a2e21] font-serif mb-2 leading-tight min-h-[44px]">{title}</h4>
-        <p className="text-gray-500 text-xs mb-4 line-clamp-2">
-          Perform Shani Shanti Puja for relief from hardships, prosperity, career growth, peace, and lasting stability.
+      {/* Top Banner Image Container with Subtle Space */}
+      <div className="relative w-full h-[220px] sm:h-[235px] rounded-2xl overflow-hidden mb-2.5 bg-stone-100 shrink-0">
+        <Image
+          src={imageSrc}
+          alt={title}
+          fill
+          className="object-cover object-center"
+          priority
+        />
+
+        {/* Top Right Floating Action Buttons (Wishlist & Share) */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
+          {/* Wishlist Heart Button */}
+          <button 
+            aria-label="Add to wishlist"
+            className="w-8 h-8 rounded-full bg-white/95 text-stone-700 hover:text-red-500 flex items-center justify-center shadow-md backdrop-blur-sm transition-transform active:scale-95"
+          >
+            <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          </button>
+
+          {/* Share Button */}
+          <button 
+            aria-label="Share puja"
+            className="w-8 h-8 rounded-full bg-white/95 text-stone-700 hover:text-[#00b050] flex items-center justify-center shadow-md backdrop-blur-sm transition-transform active:scale-95"
+          >
+            <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Card Body Container */}
+      <div className="p-1 sm:px-1.5 flex flex-col flex-1">
+        {/* Sub-header Tag with Filigree Accents */}
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="w-6 h-[1px] bg-[#8b1e10]/30" />
+          <span className="text-[#8b1e10] font-serif font-bold text-[11px] sm:text-xs tracking-wider uppercase flex items-center gap-1 text-center">
+            <span className="text-[10px]">♦</span> {topTag} <span className="text-[10px]">♦</span>
+          </span>
+          <div className="w-6 h-[1px] bg-[#8b1e10]/30" />
+        </div>
+
+        {/* Card Title */}
+        <h3 className="font-serif font-bold text-[#221f20] text-lg sm:text-xl leading-snug mb-2 line-clamp-2 min-h-[52px]">
+          {title}
+        </h3>
+
+        {/* Subtitle / Description */}
+        <p className="text-stone-500 text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2 min-h-[40px]">
+          {subtitle}
         </p>
-        
-        <div className="mt-auto space-y-2 mb-6">
-          <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
-            <span className="text-red-500">📍</span> {location}
+
+        {/* Location & Date Details Box with Vector SVG Icons */}
+        <div className="bg-stone-50/80 border border-stone-200/80 rounded-2xl p-3 sm:p-3.5 mb-4 space-y-2 text-xs font-semibold text-stone-700 mt-auto">
+          {/* Location */}
+          <div className="flex items-start gap-2.5">
+            <svg className="w-4 h-4 text-[#8b1e10] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L9 6H15L12 2ZM8 7L6 11H18L16 7H8ZM5 12L3 17H21L19 12H5ZM2 18V21H22V18H2Z" />
+            </svg>
+            <span className="leading-snug">{location}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
-            <span className="text-red-500">📅</span> {date}
+
+          <div className="w-full h-[1px] bg-stone-200/60" />
+
+          {/* Date */}
+          <div className="flex items-center gap-2.5">
+            <svg className="w-4 h-4 text-[#8b1e10] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>{date}</span>
           </div>
         </div>
-        
-        <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
+
+        {/* Bottom Footer Row: Price + Participate Button */}
+        <div className="flex items-center justify-between pt-0.5">
+          {/* Price */}
           <div>
-            <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Per Booking</div>
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-[#4a2e21]">{price}</span>
-            </div>
+            <span className="font-extrabold text-xl sm:text-2xl text-[#221f20] leading-none block">{price}</span>
+            <span className="text-[10px] sm:text-xs text-stone-500 font-medium mt-0.5 block">Per Booking</span>
           </div>
-          <button className="bg-[#009e5b] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#008c51] transition-colors flex items-center gap-2">
-            Participate Now <span>→</span>
-          </button>
+
+          {/* CTA Button */}
+          <Link
+            href={slug ? `/puja/${slug}` : "/puja/subrahmanya-swamy-abhishekam"}
+            className="inline-flex items-center gap-2 bg-[#00b050] hover:bg-[#009644] active:scale-95 text-white font-extrabold text-xs sm:text-sm px-4.5 py-2.5 rounded-full shadow-md shadow-green-600/20 transition-all duration-200 group/btn"
+          >
+            <span>Participate Now</span>
+            <div className="w-5 h-5 rounded-full bg-white text-[#00b050] flex items-center justify-center shrink-0">
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </Link>
         </div>
       </div>
     </div>

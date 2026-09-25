@@ -260,28 +260,28 @@ export default function Navbar() {
       <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} onSuccess={handleLoginSuccess} />
 
       <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 sm:px-5 lg:px-8">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-4.5 sm:px-6 lg:px-10">
 
           {/* ── Logo ── */}
           <Link href="/dashboard" className="flex items-center gap-2 shrink-0" aria-label="AstroVed Home">
-            <img src="/images/logo.svg" alt="AstroVed" className="h-8 sm:h-9 lg:h-11 w-auto object-contain" />
+            <img src="/images/logo.svg" alt="AstroVed" className="h-9 sm:h-10 lg:h-12 w-auto object-contain" />
           </Link>
 
           {/* ── Desktop Nav (lg+) ── */}
           <nav aria-label="Main navigation" className="hidden lg:flex flex-1 justify-center">
-            <ul className="flex items-center gap-6 xl:gap-8 text-[14px] xl:text-[15px] font-semibold text-[#1a1a1a]">
+            <ul className="flex items-center gap-8 xl:gap-10 text-base xl:text-[17px] font-bold text-[#1a1a1a]">
               <li>
-                <Link href="/dashboard" className={isActivePath("/dashboard") ? "text-[#069e5d] font-bold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
+                <Link href="/dashboard" className={isActivePath("/dashboard") ? "text-[#069e5d] font-extrabold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
                   HOME
                 </Link>
               </li>
               <li>
-                <Link href="/puja" className={isActivePath("/puja") ? "text-[#069e5d] font-bold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
+                <Link href="/puja" className={isActivePath("/puja") ? "text-[#069e5d] font-extrabold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
                   PUJA
                 </Link>
               </li>
               <li>
-                <Link href="/chadhava" className={isActivePath("/chadhava") ? "text-[#069e5d] font-bold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
+                <Link href="/chadhava" className={isActivePath("/chadhava") ? "text-[#069e5d] font-extrabold border-b-2 border-[#069e5d] pb-1" : "transition-colors hover:text-[#069e5d] uppercase"}>
                   SEVAS
                 </Link>
               </li>
@@ -294,14 +294,14 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right actions ── */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-3 sm:gap-5">
 
             {/* WhatsApp Button */}
-            <a href="https://wa.me/9677391109" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500 hover:bg-green-50 transition-colors">
-              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /></svg>
+            <a href="https://wa.me/9677391109" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border-2 border-[#069e5d] hover:bg-green-50 active:scale-95 transition-all shadow-sm">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#069e5d]" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /></svg>
               <div className="flex flex-col text-left leading-none">
-                <span className="text-[10px] text-gray-500 font-medium">Need Help?</span>
-                <span className="text-[13px] font-bold text-green-500">WhatsApp</span>
+                <span className="text-xs text-gray-500 font-medium">Need Help?</span>
+                <span className="text-sm font-extrabold text-[#069e5d] mt-0.5">WhatsApp</span>
               </div>
             </a>
 
@@ -309,11 +309,11 @@ export default function Navbar() {
             <div className="relative" ref={langRef}>
               <button
                 onClick={() => { setLangOpen((p) => !p); setAccountOpen(false); }}
-                className="flex items-center gap-1.5 h-10 px-4 rounded-full border border-green-500 bg-white text-green-600 text-[14px] font-semibold hover:bg-green-50 transition-colors"
+                className="flex items-center gap-2 h-11 sm:h-12 px-5 sm:px-6 rounded-full border-2 border-[#069e5d] bg-white text-[#069e5d] text-base font-bold hover:bg-green-50 active:scale-95 transition-all shadow-sm"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span>{languageFullNames[language] || "English"}</span>
-                <svg className={`w-3 h-3 transition-transform ${langOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className={`w-4 h-4 transition-transform ${langOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
