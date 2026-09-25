@@ -2,480 +2,370 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
-import { useTranslation } from "@/contexts/LanguageContext";
-
-const navigationItems = [
-  { label: "Home", path: "/dashboard" },
-  { label: "Puja", path: "/puja" },
-  { label: "Chadhava", path: "/chadhava" },
-  { label: "Panchang", path: "/panchang" },
-  { label: "Temples", path: "/temples" },
-  { label: "Library", path: "/library" },
-  { label: "Astro Tools", path: "/astro-tools" },
-  { label: "Store", path: "/store" },
-];
-
-const banners = [
-  {
-    id: 1,
-    title: "Offer AstroVed Puja and Chadhava at 100+ sacred temples in your Name and Gotra to your beloved deity.",
-    titleHighlight: "",
-    subtitle: "",
-    buttons: [
-      { text: "Explore Pujas", variant: "outline", href: "/puja" },
-      { text: "Participate Now", variant: "solid", href: "/puja" }
-    ],
-    image: "/images/Ganesh-Chaturthi-Mahapuja.jpg",
-    baseColor: "#5b172a",
-  },
-  {
-    id: 2,
-    title: "AstroVed Special ",
-    titleHighlight: "Puja",
-    subtitle: "Invoke peace, prosperity, and happiness for your family through online pujas at India's sacred temples — from the comfort of your home.",
-    buttons: [
-      { text: "Book Puja", variant: "solid", href: "/puja" }
-    ],
-    image: "/images/Navagraha-Shanti-Puja.jpg",
-    baseColor: "#1e3a5f",
-  },
-  {
-    id: 3,
-    title: "AstroVed",
-    titleHighlight: "",
-    titleColor: "text-yellow-400",
-    subtitle: "Experience divine blessings from sacred temples of India — enjoy online darshan, horoscope, prasad, stories, mantras, and a lot more. Exclusively on AstroVed.",
-    buttons: [
-      { text: "Download App", variant: "solid", action: "scroll-bottom" }
-    ],
-    image: "/images/Lakshmi-Homam.jpg",
-    baseColor: "#a62828",
-  },
-  {
-    id: 4,
-    title: "AstroVed Special ",
-    titleHighlight: "Chadhava",
-    subtitle: "Now offer your prayers and sacred offerings to your beloved deities at renowned temples across India — from your home. Seek divine blessings on AstroVed.",
-    buttons: [
-      { text: "Book Chadhava", variant: "solid", href: "/chadhava" }
-    ],
-    image: "/images/maa-kali.jpg",
-    baseColor: "#2b1b1b",
-  },
-];
 
 export default function DashboardPage() {
-  const { t } = useTranslation();
-  const [currentBanner, setCurrentBanner] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBanner((prev) => (prev + 1) % banners.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <main className="min-h-screen bg-white text-[#1f1f1f]">
+    <main className="min-h-screen bg-[#faf9f6] text-[#1f1f1f] font-sans">
       <Navbar />
-      <div className="h-px w-full bg-[#d5d8f5]" />
-
-      {/* Banner Section */}
-      <section className="w-full">
-        <div className="relative w-full h-[560px] sm:h-[580px] md:h-[500px] lg:h-[550px] overflow-hidden group bg-[#0f1c3d]">
-          {banners.map((banner, index) => (
-            <div
-              key={banner.id}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${index === currentBanner ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                }`}
-            >
-              <div
-                className="relative h-full w-full transition-colors duration-1000 ease-in-out flex flex-col md:block"
-                style={{ backgroundColor: banner.baseColor || "#5b172a" }}
-              >
-                {/* Image Section: Top half on mobile, Right 65% on desktop */}
-                <div className="relative w-full h-[250px] sm:h-[280px] md:absolute md:inset-y-0 md:right-0 md:w-[65%] md:h-full shrink-0 overflow-hidden">
-                  <Image
-                    src={banner.image || "/images/placeholder.jpg"}
-                    alt={banner.title}
-                    fill
-                    className={`object-cover object-top md:object-top-right transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${index === currentBanner ? 'scale-100 opacity-90 md:opacity-100' : 'scale-108 opacity-0'}`}
-                    priority={index === 0}
-                  />
-
-                  {/* Mobile bottom fade: seamlessly blends the top image into the dark/baseColor bottom letters area */}
-                  <div
-                    className="absolute inset-0 md:hidden"
-                    style={{
-                      background: `linear-gradient(to bottom, transparent 20%, ${banner.baseColor || "#5b172a"} 100%)`
-                    }}
-                  />
-                </div>
-
-                {/* Desktop merge effect (spans full width to hide the container edge on desktop) */}
-                <div
-                  className="hidden md:block absolute inset-0 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(to right, ${banner.baseColor || "#5b172a"} 35%, transparent 65%)`
-                  }}
-                />
-
-                {/* Letters/Wordings Section: Bottom area on mobile, Left 60% on desktop */}
-                <div className="relative md:absolute md:inset-0 flex flex-col justify-center items-center md:items-start text-center md:text-left px-6 sm:px-8 pt-4 pb-14 md:py-0 md:px-24 md:max-w-[60%] z-10 flex-1">
-                  <h2
-                    className={`text-2xl sm:text-3xl md:text-[44px] font-bold leading-[1.2] md:leading-[1.15] mb-4 md:mb-6 tracking-tight transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${banner.titleColor || 'text-white'} ${index === currentBanner ? 'opacity-100 translate-y-0 delay-150' : 'opacity-0 translate-y-6 duration-300 delay-0'}`}
-                  >
-                    {banner.title}
-                    {banner.titleHighlight && (
-                      <span className="text-[#ffc107]">{banner.titleHighlight}</span>
-                    )}
-                  </h2>
-                  {banner.subtitle && (
-                    <p
-                      className={`text-[15px] sm:text-[16px] md:text-[18px] font-medium text-gray-200 mb-6 md:mb-10 max-w-xl md:max-w-2xl leading-relaxed transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${index === currentBanner ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-6 duration-300 delay-0'}`}
-                    >
-                      {banner.subtitle}
-                    </p>
-                  )}
-                  <div
-                    className={`flex flex-wrap justify-center md:justify-start gap-3 md:gap-4 w-full md:w-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${index === currentBanner ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-6 duration-300 delay-0'}`}
-                  >
-                    {banner.buttons.map((btn: any, i) => {
-                      const outlineClass = `rounded-xl px-7 py-3 md:px-8 md:py-3.5 font-bold text-[14px] md:text-[15px] transition-all shadow-sm active:scale-95 bg-transparent border border-white text-white hover:bg-white/10`;
-                      const solidClass = `rounded-xl px-7 py-3 md:px-8 md:py-3.5 font-bold text-[14px] md:text-[15px] transition-all shadow-lg active:scale-95 bg-white text-[#5B5BF6] hover:bg-white/90 hover:shadow-xl`;
-                      const buttonClass = btn.variant === "outline" ? outlineClass : solidClass;
-
-                      if (btn.href) {
-                        return (
-                          <Link key={i} href={btn.href} className={buttonClass}>
-                            {btn.text}
-                          </Link>
-                        );
-                      }
-
-                      if (btn.action === "scroll-bottom") {
-                        return (
-                          <button
-                            key={i}
-                            className={buttonClass}
-                            onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
-                          >
-                            {btn.text}
-                          </button>
-                        );
-                      }
-
-                      return (
-                        <button key={i} className={buttonClass}>
-                          {btn.text}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+      
+      {/* ── 1. Hero Section ── */}
+      <section className="relative w-full max-w-[1200px] mx-auto px-4 py-8 md:py-12 mt-4 bg-white rounded-3xl border border-yellow-100 shadow-sm overflow-hidden">
+        {/* Decorative corner borders could go here */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200" />
+        
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 p-6 md:p-8">
+          {/* Left Content */}
+          <div className="flex-1 text-center md:text-left">
+            <span className="text-red-600 font-bold text-xs uppercase tracking-widest mb-3 inline-block">🔥 SHANI POURNAMI SPECIAL</span>
+            <h1 className="text-3xl md:text-4xl lg:text-[42px] font-bold text-[#3d2a23] leading-tight mb-4 font-serif">
+              Shani Shanti Puja for Prosperity, Career Opportunities & Lasting Stability!
+            </h1>
+            <p className="text-gray-600 text-sm md:text-base mb-8 max-w-[90%] mx-auto md:mx-0">
+              Perform Shani Shanti Puja for relief from hardships, prosperity, career growth, peace, and lasting stability.
+            </p>
+            <button className="bg-[#009e5b] text-white px-8 py-3.5 rounded-full font-bold text-lg shadow-lg shadow-green-500/30 hover:bg-[#008c51] transition-colors w-full md:w-auto flex items-center justify-center md:justify-between gap-4">
+              Book Puja Now
+              <div className="bg-white text-[#009e5b] rounded-full w-6 h-6 flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"/></svg>
+              </div>
+            </button>
+            
+            <div className="flex items-center justify-center md:justify-start gap-8 mt-8 border-t border-gray-100 pt-6">
+              <div className="text-center">
+                <p className="text-[10px] text-gray-500 font-medium leading-tight">Over a million+ users<br/>trust Astoved<br/>platform</p>
+              </div>
+              <div className="text-center">
+                <p className="text-red-600 font-bold text-xl leading-none">1M+</p>
+                <p className="text-[10px] text-gray-500 font-medium mt-1">Pujas Performed</p>
+              </div>
+              <div className="text-center">
+                <p className="text-red-600 font-bold text-xl leading-none">100%</p>
+                <p className="text-[10px] text-gray-500 font-medium mt-1">Secure</p>
               </div>
             </div>
-          ))}
+          </div>
+          
+          {/* Right Content / Image */}
+          <div className="flex-1 w-full relative">
+            <div className="bg-gradient-to-br from-[#4a0d0d] to-[#1a0505] rounded-2xl overflow-hidden shadow-xl relative border-4 border-[#ffebc2] w-full aspect-[4/3] flex flex-col justify-between">
+              {/* Image would go here, placeholder text for now */}
+              <div className="p-6 relative z-10 text-white">
+                <span className="inline-block bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full border border-red-500 mb-4">Shani Pournami Special</span>
+                <p className="font-bold text-yellow-300 text-sm mb-1">For Shani Dosha Relief</p>
+                <h3 className="text-3xl font-bold text-[#ffdf8a] font-serif leading-tight">Shani<br/>Tailabhishekam</h3>
+              </div>
+              <div className="bg-gradient-to-t from-black/80 to-transparent p-4 text-center z-10 mt-auto border-t border-yellow-500/30">
+                <p className="text-[#ffdf8a] text-sm font-bold flex items-center justify-center gap-2">
+                  <span>📍</span> Mangala Shaneeshwara Devasthanam
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={() => setCurrentBanner((prev) => (prev - 1 + banners.length) % banners.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-black/60 transition-colors backdrop-blur-sm z-20 opacity-0 group-hover:opacity-100"
-            aria-label="Previous banner"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 md:w-6 md:h-6"><path d="m15 18-6-6 6-6" /></svg>
-          </button>
+        {/* Badges Strip (Inside Hero) */}
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 bg-gray-50/80 px-4 py-4 border-t border-yellow-100 mt-4 rounded-b-3xl">
+          <Badge icon="🎥" text="Puja Video Delivered Within 48 hours" />
+          <Badge icon="✓" text="Verified & Experienced Pandits" />
+          <Badge icon="🏛" text="Puja Performed in Sacred Temples" />
+          <Badge icon="📜" text="100% Authentic Vedic Rituals" />
+        </div>
+      </section>
 
-          <button
-            onClick={() => setCurrentBanner((prev) => (prev + 1) % banners.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 rounded-full bg-black/40 flex items-center justify-center text-white hover:bg-black/60 transition-colors backdrop-blur-sm z-20 opacity-0 group-hover:opacity-100"
-            aria-label="Next banner"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 md:w-6 md:h-6"><path d="m9 18 6-6-6-6" /></svg>
-          </button>
+      {/* ── 2. Steps Section ── */}
+      <section className="py-16 bg-[#faf9f6]">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#4a2e21] font-serif">From Booking to Divine Blessings</h2>
+        </div>
+        <div className="max-w-[800px] mx-auto px-4 flex justify-between items-center relative">
+          {/* Connecting Line */}
+          <div className="absolute top-1/2 left-0 w-full h-[2px] bg-red-200 -z-10 -translate-y-1/2 border-t-2 border-dashed border-[#d18e7c]"></div>
+          
+          <Step icon="👆" title="Choose" subtitle="Your Puja" />
+          <Step icon="📝" title="Provide your" subtitle="Name & Gotra" />
+          <Step icon="✓" title="Puja" subtitle="Performed" active />
+          <Step icon="🎥" title="Receive Puja Video" subtitle="& Divine Blessings" />
+        </div>
+      </section>
 
-          {/* Dots Indicator */}
-          <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2 z-20">
-            {banners.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentBanner(index)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${index === currentBanner ? "bg-white w-8" : "bg-white/50 w-1.5 hover:bg-white/80"
-                  }`}
-                aria-label={`Go to banner ${index + 1}`}
-              />
-            ))}
+      {/* ── 3. Our Pujas Section ── */}
+      <section className="py-12 bg-white">
+        <div className="max-w-[1200px] mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#4a2e21] font-serif">Our Pujas</h2>
+            <div className="flex bg-gray-100 rounded-full p-1">
+              <FilterBtn text="All" active />
+              <FilterBtn text="Puja" />
+              <FilterBtn text="Sevas" />
+              <FilterBtn text="Rituals" />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Card 1 */}
+            <PujaCard 
+              imageTitle="Shri Subrahmanya Swamy Abhishekam" 
+              title="Subrahmanya Swamy Puja & Oil Abhishekam"
+              location="Aadi Murugan Devasthana"
+              date="Saturday, 21 September"
+              oldPrice="₹516"
+              price="₹516"
+            />
+            {/* Card 2 */}
+            <PujaCard 
+              imageTitle="Sade Sati Shanti Puja" 
+              title="Sade Sati Shanti Puja & Oil Abhishekam"
+              location="Mangala Shaneeshwara"
+              date="Saturday, 21 September"
+              oldPrice="₹816"
+              price="₹816"
+            />
+            {/* Card 3 */}
+            <PujaCard 
+              imageTitle="Shani Shanti Puja" 
+              title="Shani Shanti Puja for Prosperity"
+              location="Navagraha Devasthanam"
+              date="Saturday, 21 September"
+              oldPrice="₹816"
+              price="₹816"
+            />
+          </div>
+          
+          <div className="text-center mt-10">
+            <button className="text-[#009e5b] font-bold px-6 py-2 rounded-full border-2 border-[#009e5b] hover:bg-green-50 transition-colors">
+              View All Pujas
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Marquee Section */}
-      <div className="bg-[#6869F9] py-4 md:py-5 overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap flex items-center">
-          {[
-            "#1 Vedic Remedies & Astrological Insights Provider",
-            "25+ Years of Expertise in Vedic Astrology",
-            "10M+ Homas, Poojas & Remedies Performed",
-            "7M Expert Consultations",
-            "60M+ lives touched",
-            "#1 Vedic Remedies & Astrological Insights Provider",
-            "25+ Years of Expertise in Vedic Astrology",
-            "10M+ Homas, Poojas & Remedies Performed",
-            "7M Expert Consultations",
-            "60M+ lives touched",
-            "#1 Vedic Remedies & Astrological Insights Provider",
-            "25+ Years of Expertise in Vedic Astrology",
-            "10M+ Homas, Poojas & Remedies Performed",
-            "7M Expert Consultations",
-            "60M+ lives touched",
-          ].map((item, idx) => (
-            <div key={idx} className="inline-flex items-center mx-12 shrink-0">
-              <span className="text-yellow-300 text-lg md:text-xl mr-3.5 rotate-45 inline-block">✦</span>
-              <span className="text-base md:text-[17px] text-white font-bold uppercase tracking-wide">
-                {item}
-              </span>
-            </div>
-          ))}
+      {/* ── 4. Puja Gallery Section ── */}
+      <section className="py-16 bg-[#faf9f6]">
+        <div className="max-w-[1200px] mx-auto px-4 text-center">
+          <h2 className="text-[120px] font-bold text-gray-200/50 uppercase tracking-widest -mb-16 pointer-events-none select-none font-serif relative z-0">
+            Puja Gallery
+          </h2>
+          <div className="relative z-10 flex gap-4 overflow-hidden h-[300px] items-center justify-center">
+            {/* Placeholder rectangles to mimic the gallery layout */}
+            <div className="w-[200px] h-[200px] bg-[#e5e5e5] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+            <div className="w-[150px] h-[250px] bg-[#d5d5d5] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+            <div className="w-[250px] h-[220px] bg-[#dbdbdb] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+            <div className="w-[180px] h-[180px] bg-[#ececec] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+            <div className="w-[220px] h-[240px] bg-[#e8e8e8] rounded-xl shrink-0 border border-gray-300 shadow-inner"></div>
+          </div>
         </div>
+      </section>
+
+      {/* ── 5. Trust Badges Strip ── */}
+      <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 bg-[#f0f8f1] px-4 py-8 border-y border-green-100">
+        <Badge icon="🎥" text="Puja Video Delivered Within 48 hours" />
+        <Badge icon="✓" text="Verified & Experienced Pandits" />
+        <Badge icon="🏛" text="Puja Performed in Sacred Temples" />
+        <Badge icon="📜" text="100% Authentic Vedic Rituals" />
       </div>
 
-      {/* AstroVed Special Pujas Section */}
-      <section className="bg-white pt-8 pb-8 md:pt-10 md:pb-10">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-3 tracking-tight text-[#111827]">
-            <span className="text-[rgb(107,76,154)]">AstroVed</span> {t.home.specialPujas}
-          </h2>
-          <p className="text-center text-[17px] font-medium text-gray-700 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {t.home.specialPujasSubtitle}
-          </p>
-          <PujaCardsSection />
-        </div>
-      </section>
-
-      {/* Reviews & Ratings Section */}
-      <section className="bg-[#fafafa] pt-8 pb-14 md:pt-10 md:pb-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] mb-3 tracking-tight">{t.home.reviewsTitle}</h2>
-          <p className="text-[17px] font-medium text-gray-700 mb-10">{t.home.reviewsSubtitle}</p>
-
-          <ReviewsSection />
-        </div>
-      </section>
-
-      {/* Trust & Impact Section */}
-      <section className="bg-[#0f1c3d] py-14 md:py-16 text-white overflow-hidden">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column */}
-            <div>
-              <p className="text-[#f59e0b] font-bold text-sm mb-3 uppercase tracking-wide">{t.home.trustedBy}</p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold leading-tight mb-5">
-                {t.home.largestPlatform}
-              </h2>
-              <p className="text-gray-300 text-lg leading-relaxed max-w-xl">
-                {t.home.platformDesc}
-              </p>
-            </div>
-
-            {/* Right Column: Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-12">
-              <div className="flex flex-col gap-3.5">
-                <div className="h-12 w-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">🙏</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-1.5">{t.home.devotees}</h3>
-                  <p className="text-gray-400 leading-relaxed text-[15px] font-medium">{t.home.devoteesDesc}</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3.5">
-                <div className="h-12 w-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl text-yellow-400">★</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-1.5">{t.home.rating}</h3>
-                  <p className="text-gray-400 leading-relaxed text-[15px] font-medium">{t.home.ratingDesc}</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3.5">
-                <div className="h-12 w-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">🌍</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-1.5">{t.home.countries}</h3>
-                  <p className="text-gray-400 leading-relaxed text-[15px] font-medium">{t.home.countriesDesc}</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3.5">
-                <div className="h-12 w-12 bg-white/10 rounded-xl flex items-center justify-center text-2xl">🔥</div>
-                <div>
-                  <h3 className="text-xl font-bold mb-1.5">{t.home.services}</h3>
-                  <p className="text-gray-400 leading-relaxed text-[15px] font-medium">{t.home.servicesDesc}</p>
-                </div>
-              </div>
-            </div>
+      {/* ── 6. FAQ Section ── */}
+      <section className="py-16 bg-white">
+        <div className="max-w-[1200px] mx-auto px-4 flex flex-col md:flex-row gap-12">
+          {/* Left: Doubts */}
+          <div className="md:w-1/3">
+            <h3 className="text-red-500 font-bold text-sm tracking-wider uppercase mb-2">— FAQ</h3>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#4a2e21] font-serif mb-4 leading-tight">Doubts?<br/>We're Here.</h2>
+            <p className="text-gray-600 mb-8 text-sm max-w-[250px]">
+              Our devotee care team is available in 11 languages, 12 hours a day. Reach them on WhatsApp, phone, or email.
+            </p>
+            <button className="bg-[#009e5b] text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-[#008c51] transition-colors">
+              Speak to Devotee Care
+            </button>
+          </div>
+          
+          {/* Right: Accordion */}
+          <div className="md:w-2/3 flex flex-col gap-3">
+            <AccordionItem question="What is an online puja and how does it work?" active />
+            <AccordionItem question="Do I need to be present during the puja?" />
+            <AccordionItem question="What details do I need to provide when booking?" />
+            <AccordionItem question="Can I book a puja for my family members?" />
+            <AccordionItem question="Can I book a puja for someone living abroad / non-NRIs too?" />
+            <AccordionItem question="What happens after I complete my booking?" />
+            <AccordionItem question="When will I receive my puja video?" />
+            <AccordionItem question="Where will the video come on?" />
+            <AccordionItem question="What payment methods do you accept?" />
+            <AccordionItem question="Can I cancel or reschedule my booking?" />
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="bg-white pt-10 pb-8 md:pt-14 md:pb-10">
-        <div className="mx-auto max-w-[1440px] px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold text-[#1f1f1f] mb-4">{t.home.oneApp}</h2>
-            <p className="text-lg text-gray-600 max-w-5xl mx-auto leading-relaxed">
-              {t.home.oneAppDesc}
+      {/* ── 7. Footer ── */}
+      <footer className="bg-[#1f0e08] text-[#d4c5b9] pt-16 pb-8">
+        <div className="max-w-[1200px] mx-auto px-4 text-center border-b border-white/10 pb-12 mb-8">
+          <h2 className="text-2xl md:text-3xl font-serif text-white mb-6">A Sacred Path to Divine Blessings Book Your<br/>Sacred Puja</h2>
+          <p className="text-sm mb-8">Connect with divine blessings through authentic Vedic rituals.</p>
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <span className="text-white font-bold text-lg mr-2">Follow us -</span>
+            <SocialIcon bg="bg-blue-600" text="f" />
+            <SocialIcon bg="bg-pink-600" text="ig" />
+            <SocialIcon bg="bg-black" border="border border-white/20" text="x" />
+            <SocialIcon bg="bg-red-600" text="yt" />
+          </div>
+          <button className="bg-white text-[#009e5b] font-bold px-6 py-2 rounded-full text-sm hover:bg-gray-100 transition-colors inline-flex items-center gap-2 shadow-lg">
+            Find the Right Puja <div className="bg-[#009e5b] text-white rounded-full w-5 h-5 flex items-center justify-center"><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7"/></svg></div>
+          </button>
+        </div>
+        
+        <div className="max-w-[1200px] mx-auto px-4 flex flex-col md:flex-row justify-between gap-8 mb-12">
+          {/* Logo Col */}
+          <div className="md:w-1/3">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="text-white font-serif text-2xl font-bold flex items-center gap-2">
+                <span className="text-[#d97706] text-3xl">🔥</span> Vedamandir
+              </div>
+            </div>
+            <p className="text-xs text-white/60 max-w-xs leading-relaxed">
+              Vedamandir is a spiritual platform that enables devotees to book authentic Vedic pujas at sacred temples across India.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-14">
-            {/* Feature 1 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#1f2937] rounded-xl flex items-center justify-center text-2xl shadow-md">🔔</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.divineTemple}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.divineTempleDesc}</p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#c2410c] rounded-xl flex items-center justify-center text-2xl shadow-md">📖</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.hinduLiterature}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.hinduLiteratureDesc}</p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#0d9488] rounded-xl flex items-center justify-center text-2xl shadow-md">🎵</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.devotionalMusic}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.devotionalMusicDesc}</p>
-              </div>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#ea580c] rounded-xl flex items-center justify-center text-2xl shadow-md">✡</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.panchangFeature}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.panchangFeatureDesc}</p>
-              </div>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#ca8a04] rounded-xl flex items-center justify-center text-2xl shadow-md">☸</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.pujaService}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.pujaServiceDesc}</p>
-              </div>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="flex flex-col gap-4">
-              <div className="h-14 w-14 bg-[#dc2626] rounded-xl flex items-center justify-center text-2xl shadow-md">🕉</div>
-              <div>
-                <h3 className="text-xl font-bold text-[#1f1f1f] mb-2">{t.home.community}</h3>
-                <p className="text-gray-600 text-base leading-relaxed">{t.home.communityDesc}</p>
-              </div>
-            </div>
+          
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-white font-bold mb-4">Quick Links</h4>
+            <ul className="flex flex-col gap-2 text-xs text-white/60">
+              <li><Link href="/puja" className="hover:text-white transition-colors">Puja</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Our Brands</Link></li>
+            </ul>
+          </div>
+          
+          {/* Legal */}
+          <div>
+            <h4 className="text-white font-bold mb-4">Legal</h4>
+            <ul className="flex flex-col gap-2 text-xs text-white/60">
+              <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Account Deletion</Link></li>
+              <li><Link href="#" className="hover:text-white transition-colors">Contact Us</Link></li>
+            </ul>
+          </div>
+          
+          {/* Contact */}
+          <div>
+            <h4 className="text-white font-bold mb-4">Contact</h4>
+            <ul className="flex flex-col gap-3 text-xs text-white/60 max-w-[200px]">
+              <li className="flex gap-2"><span>✉</span> support@vedamandir.com</li>
+              <li className="flex gap-2"><span>📞</span> +91 72072 02029</li>
+              <li className="flex gap-2 leading-relaxed"><span>📍</span> 1st Floor, H.No. 4-4-490, Plot No. 490, Road No. 22, LAXMI NGR, Hyderabad, Telangana 500035</li>
+            </ul>
           </div>
         </div>
-      </section>
-
-      {/* Articles Section (Exactly as in Image) */}
-      <section className="bg-white pt-1 pb-16 md:pt-5 md:pb-20">
-        <div className="mx-auto max-w-[1440px] px-6">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1f1f1f] mb-4 leading-snug">
-              {t.home.articlesTitle}
-            </h2>
-            <p className="text-lg text-gray-600 mb-4">
-              {t.home.articlesSubtitle}
-            </p>
-            <Link href="/library" className="inline-flex items-center text-[#1f1f1f] font-bold text-sm hover:underline">
-              {t.home.readAll} <span className="ml-1">→</span>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Card 1: Aarti */}
-            <div className="flex flex-col">
-              <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 shadow-md">
-                <img
-                  src="https://www.srimandir.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Faarti_article_image.0d882263.webp&w=1920&q=75"
-                  alt="Aarti"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-[#1f1f1f] mb-3">{t.home.aarti}</h3>
-              <p className="text-gray-600 text-[15px] leading-relaxed mb-6 flex-1">
-                {t.home.aartiDesc}
-              </p>
-              <Link href="/library?tab=aarti" className="text-[#1f1f1f] font-bold text-xs uppercase tracking-wider hover:underline">
-                {t.home.readAll}
-              </Link>
-            </div>
-
-            {/* Card 2: Chalisa */}
-            <div className="flex flex-col">
-              <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 shadow-md">
-                <img
-                  src="https://www.srimandir.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fchaalisa_article_image.940dd0a3.webp&w=1920&q=75"
-                  alt="Chalisa"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-[#1f1f1f] mb-3">{t.home.chalisa}</h3>
-              <p className="text-gray-600 text-[15px] leading-relaxed mb-6 flex-1">
-                {t.home.chalisaDesc}
-              </p>
-              <Link href="/library?tab=chalisa" className="text-[#1f1f1f] font-bold text-xs uppercase tracking-wider hover:underline">
-                {t.home.readAll}
-              </Link>
-            </div>
-
-            {/* Card 3: Mantra */}
-            <div className="flex flex-col">
-              <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 shadow-md">
-                <img
-                  src="https://www.srimandir.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmantra_article_image.c0b022ae.webp&w=1920&q=75"
-                  alt="Mantra"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-[#1f1f1f] mb-3">{t.home.mantra}</h3>
-              <p className="text-gray-600 text-[15px] leading-relaxed mb-6 flex-1">
-                {t.home.mantraDesc}
-              </p>
-              <Link href="/library?tab=mantra" className="text-[#1f1f1f] font-bold text-xs uppercase tracking-wider hover:underline">
-                {t.home.readAll}
-              </Link>
-            </div>
-
-            {/* Card 4: Ayurvedic & Home Remedies */}
-            <div className="flex flex-col">
-              <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 shadow-md">
-                <img
-                  src="https://www.srimandir.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fayurvedic_article_image.0a07e763.webp&w=1920&q=75"
-                  alt="Ayurvedic & Home Remedies"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-bold text-[#1f1f1f] mb-3">{t.home.ayurvedic}</h3>
-              <p className="text-gray-600 text-[15px] leading-relaxed mb-6 flex-1">
-                {t.home.ayurvedicDesc}
-              </p>
-              <Link href="/library?tab=remedies" className="text-[#1f1f1f] font-bold text-xs uppercase tracking-wider hover:underline">
-                {t.home.readAll}
-              </Link>
-            </div>
-          </div>
+        
+        <div className="text-center text-[10px] text-white/40">
+          © 2024 Vedamandir. All rights reserved.
         </div>
-      </section>
-
-
+      </footer>
     </main>
+  );
+}
+
+// --- Helper Components ---
+
+function Badge({ icon, text }: { icon: string; text: string }) {
+  return (
+    <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-[#009e5b]">
+      <span className="bg-green-100 rounded-full w-6 h-6 flex items-center justify-center text-sm">{icon}</span>
+      <span>{text}</span>
+    </div>
+  );
+}
+
+function Step({ icon, title, subtitle, active }: { icon: string; title: string; subtitle: string; active?: boolean }) {
+  return (
+    <div className="flex flex-col items-center bg-[#faf9f6] z-10 p-2">
+      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-md border-4 mb-3 transition-colors ${active ? 'bg-[#009e5b] text-white border-green-200 shadow-green-200' : 'bg-white text-gray-400 border-white shadow-gray-200'}`}>
+        {icon}
+      </div>
+      <p className="text-[10px] md:text-xs text-gray-500 text-center font-medium leading-tight">
+        {title}<br/><span className="text-[#4a2e21] font-bold">{subtitle}</span>
+      </p>
+    </div>
+  );
+}
+
+function FilterBtn({ text, active }: { text: string; active?: boolean }) {
+  return (
+    <button className={`px-5 py-1.5 rounded-full text-sm font-bold transition-colors shadow-sm ${active ? 'bg-[#009e5b] text-white' : 'bg-white text-gray-500 hover:text-gray-800'}`}>
+      {text}
+    </button>
+  );
+}
+
+function PujaCard({ imageTitle, title, location, date, price, oldPrice }: any) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow overflow-hidden flex flex-col group relative">
+      <div className="h-[200px] bg-gradient-to-br from-[#5b2424] to-[#260e0e] relative p-4 flex items-center justify-center border-b-4 border-yellow-500">
+        <span className="absolute top-3 left-3 bg-red-700 text-white text-[10px] font-bold px-2 py-0.5 rounded border border-red-500 z-10 shadow-sm">Shani Pournami Special</span>
+        <div className="absolute top-3 right-3 bg-white/20 p-1.5 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/40 transition-colors">
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3 className="text-yellow-400 font-serif font-bold text-center text-xl relative z-10 px-8 leading-tight">{imageTitle}</h3>
+        {/* Decorative circle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140px] h-[140px] border border-yellow-500/20 rounded-full"></div>
+      </div>
+      
+      <div className="p-5 flex flex-col flex-1">
+        <h4 className="text-lg font-bold text-[#4a2e21] font-serif mb-2 leading-tight min-h-[44px]">{title}</h4>
+        <p className="text-gray-500 text-xs mb-4 line-clamp-2">
+          Perform Shani Shanti Puja for relief from hardships, prosperity, career growth, peace, and lasting stability.
+        </p>
+        
+        <div className="mt-auto space-y-2 mb-6">
+          <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
+            <span className="text-red-500">📍</span> {location}
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
+            <span className="text-red-500">📅</span> {date}
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
+          <div>
+            <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Per Booking</div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-[#4a2e21]">{price}</span>
+            </div>
+          </div>
+          <button className="bg-[#009e5b] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md hover:bg-[#008c51] transition-colors flex items-center gap-2">
+            Participate Now <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccordionItem({ question, active }: { question: string; active?: boolean }) {
+  return (
+    <div className={`border rounded-xl px-5 py-4 transition-colors ${active ? 'border-green-500 shadow-sm bg-white' : 'border-gray-200 bg-[#faf9f6] hover:bg-white cursor-pointer'}`}>
+      <div className="flex justify-between items-center">
+        <h4 className={`text-sm font-bold ${active ? 'text-[#009e5b]' : 'text-gray-700'}`}>{question}</h4>
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs shrink-0 ml-4 ${active ? 'bg-[#009e5b] text-white' : 'bg-gray-200 text-gray-500'}`}>
+          {active ? '-' : '+'}
+        </div>
+      </div>
+      {active && (
+        <div className="mt-3 text-xs text-gray-500 leading-relaxed pr-8 border-t border-gray-100 pt-3">
+          An online puja is performed on your behalf by our experienced pandits at sacred temples. You will receive a personalized video of your sankalpa via WhatsApp.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SocialIcon({ bg, border, text }: { bg: string; border?: string; text: string }) {
+  return (
+    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold uppercase cursor-pointer hover:scale-110 transition-transform ${bg} ${border || ''}`}>
+      {text}
+    </div>
   );
 }
 
@@ -543,7 +433,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
 export function ReviewsSection() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -604,164 +494,58 @@ export function ReviewsSection() {
     }
   };
 
-  if (loading) return <div className="animate-pulse text-gray-400">Loading reviews...</div>;
-  if (!reviews.length) return null;
+  if (loading) {
+    return <div className="text-center py-10 text-gray-500">Loading reviews...</div>;
+  }
+
+  if (!reviews.length) {
+    return null;
+  }
 
   return (
-    <div className="relative group">
+    <div className="relative max-w-full mx-auto px-10">
+      {/* Navigation Buttons */}
+      <button
+        onClick={() => handleScroll('left')}
+        className="absolute left-0 top-[100px] -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex items-center justify-center text-gray-600 hover:text-black z-10 hover:scale-110 transition-transform"
+      >
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6"><path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+
       <div
         ref={scrollRef}
-        className="flex gap-8 overflow-x-auto pb-10 snap-x snap-mandatory scrollbar-hide no-scrollbar items-start"
-        onScroll={(e) => {
-          const scrollLeft = e.currentTarget.scrollLeft;
-          const cardWidth = getCardWidth();
-          const index = Math.round(scrollLeft / cardWidth);
-          if (index !== currentIndex) setCurrentIndex(index);
-        }}
+        className="flex gap-8 overflow-x-hidden scroll-smooth pb-8 pt-4 px-2 -mx-2"
       >
         {reviews.map((review) => (
-          <div key={review._id} className="snap-center">
-            <ReviewCard review={review} />
-          </div>
+          <ReviewCard key={review._id} review={review} />
         ))}
       </div>
 
-      <div className="mt-8 flex justify-center items-center gap-4">
-        {/* Left Arrow */}
-        <button
-          onClick={() => handleScroll('left')}
-          className="h-8 w-8 rounded-full bg-[#d1d5db] flex items-center justify-center hover:bg-gray-400 transition-all shadow-sm active:scale-95"
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 rotate-180 text-white"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
-        </button>
+      <button
+        onClick={() => handleScroll('right')}
+        className="absolute right-0 top-[100px] -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex items-center justify-center text-gray-600 hover:text-black z-10 hover:scale-110 transition-transform"
+      >
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6"><path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
 
-        {/* Dots */}
-        <div className="flex gap-1.5 items-center">
-          {reviews.map((_, idx) => (
-            <div
-              key={idx}
-              className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-4 bg-[#6869F9]" : "w-1.5 bg-[#cbd5e1]"
-                }`}
-            ></div>
-          ))}
-        </div>
-
-        {/* Right Arrow */}
-        <button
-          onClick={() => handleScroll('right')}
-          className="h-8 w-8 rounded-full bg-[#6869F9] flex items-center justify-center shadow-md hover:bg-[#5657e8] active:scale-95 transition-all"
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-white"><path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" /></svg>
-        </button>
+      {/* Dots Indicator */}
+      <div className="flex justify-center gap-2 mt-4">
+        {reviews.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              setCurrentIndex(idx);
+              if (scrollRef.current) {
+                scrollRef.current.scrollTo({
+                  left: idx * getCardWidth(),
+                  behavior: 'smooth'
+                });
+              }
+            }}
+            className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-6 bg-[#6869F9]' : 'w-2 bg-gray-300'}`}
+          />
+        ))}
       </div>
     </div>
   );
 }
-
-
-// --- Dynamic Puja Cards Section ---
-import React from "react";
-
-type Puja = {
-  _id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  imageUrl: string;
-  buttonText: string;
-  slug?: string;
-  createdAt?: string;
-  badge?: string;
-};
-
-const PujaCard = ({ puja }: { puja: Puja }) => (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col p-5">
-    {/* Image Section */}
-    <div className="relative h-[220px] w-full rounded-xl overflow-hidden shrink-0">
-      <img
-        src={puja.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=800&q=80"}
-        alt={puja.title}
-        className="w-full h-full object-fit"
-      />
-      {/* Top Left Badge */}
-      {puja.badge && (
-        <div className="absolute top-3 left-3 bg-[#ffc107] text-[#1f1f1f] text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
-          {puja.badge}
-        </div>
-      )}
-    </div>
-
-    {/* Content Section */}
-    <div className="pt-5 pb-1 px-1 flex flex-col flex-1 text-left">
-      {puja.subtitle && (
-        <p className="text-[#6869F9] text-[11px] font-bold uppercase tracking-widest mb-3 text-center w-full">
-          {puja.subtitle}
-        </p>
-      )}
-      <h3 className="text-[18px] font-bold text-[#1f1f1f] mb-3 leading-snug">
-        {puja.title}
-      </h3>
-      <p className="text-gray-500 text-[14px] leading-relaxed line-clamp-2 mb-6 flex-1">
-        {puja.description}
-      </p>
-
-      {/* Location & Date */}
-      <div className="flex items-start gap-2.5 mb-3 text-[13px] text-gray-500">
-        <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-        <span className="line-clamp-2 leading-tight">{(puja as any).location || "Sacred Temple, India"}</span>
-      </div>
-      <div className="flex items-start gap-2.5 mb-6 text-[13px] text-gray-500">
-        <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-        <span className="leading-tight">{(puja as any).date || "Upcoming Auspicious Date"}</span>
-      </div>
-
-      <Link href={`/puja/${puja.slug || String(puja.title || '').toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')}`} className="w-full bg-[#6869F9] text-white text-[15px] font-bold tracking-wide py-3.5 rounded-lg hover:bg-[#5657e8] transition-colors flex items-center justify-center gap-1.5">
-        {puja.buttonText || "PARTICIPATE"}
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-      </Link>
-    </div>
-  </div>
-);
-
-export function PujaCardsSection() {
-  const { t } = useTranslation();
-  const [pujas, setPujas] = React.useState<Puja[]>([]);
-  React.useEffect(() => {
-    fetch("/api/special-pujas")
-      .then((res) => res.json())
-      .then((data) => {
-        if (!Array.isArray(data)) {
-          setPujas([]);
-          return;
-        }
-
-        const recentThree = [...(data as Puja[])]
-          .sort((a, b) => {
-            const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-            const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-            return timeB - timeA;
-          })
-          .slice(0, 3);
-
-        setPujas(recentThree);
-      });
-  }, []);
-  if (!pujas.length) return null;
-  return (
-    <div className="flex flex-col items-center">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 w-full">
-        {pujas.map((puja) => (
-          <PujaCard key={puja._id} puja={puja} />
-        ))}
-      </div>
-      <div className="mt-8">
-        <Link href="/puja" className="text-[#1f1f1f] text-xl hover:text-[#000000] transition-all flex items-center gap-2 group">
-          {t.home.viewAllPujas} <span className="group-hover:translate-x-2 transition-transform">→</span>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-// Insert the PujaCardsSection below the filters and input
-
