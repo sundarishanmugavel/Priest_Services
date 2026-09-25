@@ -16,7 +16,6 @@ export async function proxy(request: NextRequest) {
   // Protect /admin and /api/admin routes, but allow login endpoints
   const isAdminPath = pathname.startsWith('/admin') && pathname !== '/admin/login';
   const isAdminApi = pathname.startsWith('/api/admin') && pathname !== '/api/admin/login';
-  
   if (isAdminPath || isAdminApi) {
     const token = request.cookies.get('adminToken')?.value;
 
@@ -26,7 +25,6 @@ export async function proxy(request: NextRequest) {
       }
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
-    
     try {
       await jwtVerify(token, getJwtSecret());
       return NextResponse.next();
