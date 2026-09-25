@@ -217,20 +217,20 @@ export default function DashboardPage() {
       </section>
 
       {/* ── 4. Puja Gallery Section ── */}
-      <section className="py-16 sm:py-20 bg-[#faf9f6] relative overflow-hidden">
-        {/* Background Typography */}
-        <h2 className="text-[70px] sm:text-[110px] md:text-[145px] lg:text-[170px] font-bold text-stone-900/[0.04] font-serif uppercase tracking-widest text-center select-none pointer-events-none whitespace-nowrap absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+      <section className="pt-10 pb-8 sm:pt-14 sm:pb-12 bg-white relative overflow-hidden">
+        {/* Background Typography at Top */}
+        <h2 className="text-[75px] sm:text-[115px] md:text-[150px] lg:text-[185px] font-bold text-stone-200/90 font-serif tracking-tight text-center select-none pointer-events-none whitespace-nowrap absolute top-1 left-1/2 -translate-x-1/2 z-0 leading-none">
           Puja Gallery
         </h2>
 
-        {/* Marquee Row Container with Gradient Mask Edges */}
-        <div className="relative z-10 overflow-hidden w-full py-4 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-16 sm:before:w-28 before:bg-gradient-to-r before:from-[#faf9f6] before:to-transparent before:z-20 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-16 sm:after:w-28 after:bg-gradient-to-l after:from-[#faf9f6] after:to-transparent after:z-20">
-          <div className="flex animate-marquee gap-4 sm:gap-6 items-center">
+        {/* Marquee Row Container anchored at Bottom of Font */}
+        <div className="relative z-10 overflow-hidden w-full pt-16 sm:pt-24 pb-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-16 sm:before:w-28 before:bg-gradient-to-r before:from-white before:to-transparent before:z-20 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-16 sm:after:w-28 after:bg-gradient-to-l after:from-white after:to-transparent after:z-20">
+          <div className="flex animate-marquee gap-4 sm:gap-6 items-end">
             {/* Repeat list twice for continuous infinite marquee */}
             {[...galleryImages, ...galleryImages].map((img, idx) => (
               <div 
                 key={idx} 
-                className={`relative shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden shadow-md border border-stone-200/80 group cursor-pointer transition-transform duration-300 hover:scale-[1.02] ${img.aspect}`}
+                className={`relative shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm border border-stone-200/80 group cursor-pointer transition-transform duration-300 hover:scale-[1.02] ${img.aspect}`}
               >
                 <Image
                   src={img.src}
@@ -358,44 +358,44 @@ export default function DashboardPage() {
 
 const galleryImages = [
   {
-    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja.jpg",
-    alt: "Purohit Sankalpam Ritual",
-    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
-  },
-  {
-    src: "/images/Service images/Maha Ganapati Homam/Maha-Ganapati-Homam.jpg",
-    alt: "Maha Ganapati Homam Fire",
-    aspect: "w-[210px] sm:w-[250px] h-[190px] sm:h-[220px]",
-  },
-  {
-    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam.jpg",
-    alt: "Vedic Priest at Puja Altar",
-    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
-  },
-  {
-    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja1.jpg",
-    alt: "Shiva Lingam Sacred Abhishekam",
-    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
-  },
-  {
     src: "/images/Service images/Mangal Dosha Nivaran Puja/Mangal-Dosha-Nivaran-Puja.jpg",
-    alt: "Deity Flower Garland Floral Ritual",
-    aspect: "w-[210px] sm:w-[250px] h-[190px] sm:h-[220px]",
-  },
-  {
-    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam1.jpg",
-    alt: "Vedic Altar Sacred Decoration",
-    aspect: "w-[170px] sm:w-[210px] h-[260px] sm:h-[300px]",
+    alt: "Deity Flower Garland Ritual",
+    aspect: "w-[160px] sm:w-[190px] h-[270px] sm:h-[310px]", // Tall
   },
   {
     src: "/images/Service images/Satyanarayan Katha Puja/Satyanarayan-Katha-Puja.jpg",
-    alt: "Temple Pandits Sacred Fire Ceremony",
-    aspect: "w-[220px] sm:w-[260px] h-[190px] sm:h-[220px]",
+    alt: "Temple Pandits Homam",
+    aspect: "w-[210px] sm:w-[250px] h-[160px] sm:h-[180px]", // Small
+  },
+  {
+    src: "/images/Service images/Maha Ganapati Homam/Maha-Ganapati-Homam.jpg",
+    alt: "Pandit Lamp Offering",
+    aspect: "w-[200px] sm:w-[240px] h-[170px] sm:h-[190px]", // Medium-small
+  },
+  {
+    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam1.jpg",
+    alt: "Sacred Fire Ceremony",
+    aspect: "w-[210px] sm:w-[250px] h-[150px] sm:h-[165px]", // Small
+  },
+  {
+    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja.jpg",
+    alt: "Purohit Sacred Thread Ritual",
+    aspect: "w-[160px] sm:w-[190px] h-[310px] sm:h-[350px]", // Very Tall
   },
   {
     src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja2.jpg",
-    alt: "Sacred Aarathi Ritual",
-    aspect: "w-[180px] sm:w-[220px] h-[240px] sm:h-[270px]",
+    alt: "Sacred Homam Fire",
+    aspect: "w-[210px] sm:w-[250px] h-[160px] sm:h-[180px]", // Medium-small
+  },
+  {
+    src: "/images/Service images/Mahalakshmi Kubera Homam/Mahalakshmi-Kubera-Homam.jpg",
+    alt: "Vedic Priest at Kolam Altar",
+    aspect: "w-[160px] sm:w-[190px] h-[310px] sm:h-[350px]", // Very Tall
+  },
+  {
+    src: "/images/Service images/rudrabhishekam-puja/rudrabhishekam-puja1.jpg",
+    alt: "Shiva Lingam Abhishekam",
+    aspect: "w-[160px] sm:w-[190px] h-[310px] sm:h-[350px]", // Very Tall
   },
 ];
 
@@ -474,39 +474,39 @@ function PujaCard({ imageSrc, topTag, title, subtitle, location, date, price, sl
       {/* Card Body Container */}
       <div className="p-1 sm:px-1.5 flex flex-col flex-1">
         {/* Sub-header Tag with Filigree Accents */}
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="w-6 h-[1px] bg-[#8b1e10]/30" />
-          <span className="text-[#8b1e10] font-serif font-bold text-[11px] sm:text-xs tracking-wider uppercase flex items-center gap-1 text-center">
+        <div className="flex items-center justify-center gap-2 mb-2.5">
+          <div className="w-8 h-[1px] bg-[#8b1e10]/40" />
+          <span className="text-[#8b1e10] font-serif font-extrabold text-xs sm:text-[13px] tracking-wider uppercase flex items-center gap-1.5 text-center">
             <span className="text-[10px]">♦</span> {topTag} <span className="text-[10px]">♦</span>
           </span>
-          <div className="w-6 h-[1px] bg-[#8b1e10]/30" />
+          <div className="w-8 h-[1px] bg-[#8b1e10]/40" />
         </div>
 
         {/* Card Title */}
-        <h3 className="font-serif font-bold text-[#221f20] text-lg sm:text-xl leading-snug mb-2 line-clamp-2 min-h-[52px]">
+        <h3 className="font-serif font-bold text-[#1f1a17] text-xl sm:text-2xl leading-snug tracking-tight mb-2.5 line-clamp-2 min-h-[56px]">
           {title}
         </h3>
 
         {/* Subtitle / Description */}
-        <p className="text-stone-500 text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2 min-h-[40px]">
+        <p className="text-stone-600 text-xs sm:text-sm font-medium leading-relaxed mb-4 line-clamp-2 min-h-[40px]">
           {subtitle}
         </p>
 
         {/* Location & Date Details Box with Vector SVG Icons */}
-        <div className="bg-stone-50/80 border border-stone-200/80 rounded-2xl p-3 sm:p-3.5 mb-4 space-y-2 text-xs font-semibold text-stone-700 mt-auto">
+        <div className="bg-stone-50 border border-stone-200/90 rounded-2xl p-3 sm:p-3.5 mb-4.5 space-y-2.5 text-xs sm:text-[13px] font-bold text-stone-800 mt-auto">
           {/* Location */}
           <div className="flex items-start gap-2.5">
-            <svg className="w-4 h-4 text-[#8b1e10] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-4.5 h-4.5 text-[#8b1e10] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2L9 6H15L12 2ZM8 7L6 11H18L16 7H8ZM5 12L3 17H21L19 12H5ZM2 18V21H22V18H2Z" />
             </svg>
             <span className="leading-snug">{location}</span>
           </div>
 
-          <div className="w-full h-[1px] bg-stone-200/60" />
+          <div className="w-full h-[1px] bg-stone-200/70" />
 
           {/* Date */}
           <div className="flex items-center gap-2.5">
-            <svg className="w-4 h-4 text-[#8b1e10] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-4.5 h-4.5 text-[#8b1e10] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
@@ -520,14 +520,14 @@ function PujaCard({ imageSrc, topTag, title, subtitle, location, date, price, sl
         <div className="flex items-center justify-between pt-0.5">
           {/* Price */}
           <div>
-            <span className="font-extrabold text-xl sm:text-2xl text-[#221f20] leading-none block">{price}</span>
-            <span className="text-[10px] sm:text-xs text-stone-500 font-medium mt-0.5 block">Per Booking</span>
+            <span className="font-extrabold text-2xl sm:text-3xl text-[#1f1a17] leading-none block">{price}</span>
+            <span className="text-xs text-stone-500 font-semibold mt-0.5 block">Per Booking</span>
           </div>
 
           {/* CTA Button */}
           <Link
             href={slug ? `/puja/${slug}` : "/puja/subrahmanya-swamy-abhishekam"}
-            className="inline-flex items-center gap-2 bg-[#00b050] hover:bg-[#009644] active:scale-95 text-white font-extrabold text-xs sm:text-sm px-4.5 py-2.5 rounded-full shadow-md shadow-green-600/20 transition-all duration-200 group/btn"
+            className="inline-flex items-center gap-2 bg-[#00b050] hover:bg-[#009644] active:scale-95 text-white font-extrabold text-xs sm:text-sm px-5 py-2.5 sm:py-3 rounded-full shadow-md shadow-green-600/20 transition-all duration-200 group/btn"
           >
             <span>Participate Now</span>
             <div className="w-5 h-5 rounded-full bg-white text-[#00b050] flex items-center justify-center shrink-0">
