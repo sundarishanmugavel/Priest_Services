@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import { SparklesIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useTranslation } from "@/contexts/LanguageContext";
-import { ReviewsSection } from "@/app/dashboard/page";
+import ReviewsSection from "@/components/common/ReviewsSection";
 import HowItWorksCarousel from "@/components/common/HowItWorksCarousel";
 
 interface Puja {
