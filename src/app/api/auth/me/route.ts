@@ -14,18 +14,18 @@ export async function GET() {
 
     const { payload } = await jwtVerify(token, getJwtSecret());
     return NextResponse.json({
-       authenticated: true,
-       user: {
-         id: payload.userId,
-         customerId: payload.customerId,
-         name: payload.name,
-         email: payload.email,
-         phone: payload.phone,
-         whatsapp: payload.whatsapp,
-         country: payload.country,
-         currency: payload.currency,
-         loginProvider: payload.loginProvider,
-       }
+      authenticated: true,
+      user: {
+        id: payload.userId,
+        customerId: payload.customerId,
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        whatsapp: payload.whatsapp,
+        country: payload.country,
+        currency: payload.currency,
+        loginProvider: payload.loginProvider,
+      }
     });
   } catch {
     return NextResponse.json({ authenticated: false }, { status: 401 });

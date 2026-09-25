@@ -145,7 +145,15 @@ const filterOptionImages: Record<string, string> = {
 };
 
 /** Returns true if the puja matches ALL active filters */
-function pujaMatchesFilters(puja: Puja, filters: FilterState): boolean {
+function pujaMatchesFilters(puja: Puja, filters: FilterState, searchQuery: string): boolean {
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    const searchMatches = [puja.title, puja.subtitle, puja.description, puja.location, puja.badge]
+      .filter(Boolean)
+      .some(text => text?.toLowerCase().includes(q));
+    if (!searchMatches) return false;
+  }
+
   const fieldMapping: Record<string, keyof Puja> = {
     Deity: "deity",
     Tithis: "tithis",
@@ -354,6 +362,91 @@ function PujaFilterModal({
   );
 }
 
+function ShareModal({
+  isOpen,
+  onClose,
+  pujaUrl
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  pujaUrl: string;
+}) {
+  if (!isOpen) return null;
+
+  const handleShare = (platform: string) => {
+    let url = "";
+    const text = encodeURIComponent("Check out this sacred Puja!");
+    const encodedPujaUrl = encodeURIComponent(pujaUrl);
+
+    if (platform === "whatsapp") url = `https://wa.me/?text=${text}%20${encodedPujaUrl}`;
+    if (platform === "facebook") url = `https://www.facebook.com/sharer/sharer.php?u=${encodedPujaUrl}`;
+    if (platform === "twitter") url = `https://twitter.com/intent/tweet?text=${text}&url=${encodedPujaUrl}`;
+    if (platform === "telegram") url = `https://t.me/share/url?url=${encodedPujaUrl}&text=${text}`;
+
+    if (url) window.open(url, "_blank");
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(pujaUrl);
+    alert("Link copied!");
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl relative">
+        <button onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-gray-600">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h3 className="text-lg font-bold text-gray-900 mb-6">Share Pooja</h3>
+
+        <div className="grid grid-cols-2 gap-3">
+          <button onClick={() => handleShare("whatsapp")} className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 hover:border-green-200 transition-colors">
+            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+              <i className="fa-brands fa-whatsapp text-xl"></i>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">WhatsApp</span>
+          </button>
+
+          <button className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
+            <div className="w-10 h-10 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+              <i className="fa-brands fa-instagram text-xl"></i>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">Instagram</span>
+          </button>
+
+          <button onClick={() => handleShare("facebook")} className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 hover:border-blue-200 transition-colors">
+            <div className="w-10 h-10 bg-[#1877F2] rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+              <i className="fa-brands fa-facebook-f text-xl"></i>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">Facebook</span>
+          </button>
+
+          <button onClick={() => handleShare("twitter")} className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 hover:border-gray-300 transition-colors">
+            <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+              <i className="fa-brands fa-x-twitter text-xl"></i>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">Twitter</span>
+          </button>
+
+          <button onClick={() => handleShare("telegram")} className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 hover:border-blue-200 transition-colors">
+            <div className="w-10 h-10 bg-[#0088cc] rounded-full flex items-center justify-center text-white mb-2 shadow-sm">
+              <i className="fa-brands fa-telegram text-xl"></i>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">Telegram</span>
+          </button>
+
+          <button onClick={copyLink} className="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
+            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 mb-2 shadow-sm">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+            </div>
+            <span className="text-xs font-semibold text-gray-700">Copy Link</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // --- Main Page ----------------------------------------------------------------
 export default function PujaPage() {
   const { t } = useTranslation();
@@ -362,6 +455,14 @@ export default function PujaPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
+  const openShareModal = (url: string) => {
+    setShareUrl(url);
+    setShareModalOpen(true);
+  };
 
   // Fetch all pujas once
   useEffect(() => {
@@ -425,7 +526,7 @@ export default function PujaPage() {
   const hasActiveFilters = Object.values(filters).some((arr) => arr && arr.length > 0);
 
   // -- Apply filters to get displayed pujas --
-  const displayedPujas = allPujas.filter((p) => pujaMatchesFilters(p, filters));
+  const displayedPujas = allPujas.filter((p) => pujaMatchesFilters(p, filters, searchQuery));
   const howItWorksSteps = [
     {
       title: t.puja.step1Title,
@@ -464,344 +565,189 @@ export default function PujaPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#f9f9ff] py-10">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-8">
-
-          {/* Page Heading */}
-          <h1 className="mb-8 text-center text-[18px] font-bold leading-tight text-[#3b0764] md:text-[36px]">
-            {t.puja.heading}
-          </h1>
-
-          {/* Banner Carousel — instant render */}
-          <div className="relative overflow-hidden rounded-2xl border border-[#e3d9f8] shadow-[0_18px_48px_rgba(80,44,150,0.12)]">
-            <div className="overflow-hidden">
-              <div
-                className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-              >
-                {carouselPujas.map((puja, idx) => (
-                  <div
-                    key={puja._id}
-                    className="relative h-[460px] sm:h-[480px] w-full shrink-0 md:h-[400px] flex flex-col md:block bg-linear-to-br from-[#2e1065] via-[#3b0764] to-[#1e1b4b] overflow-hidden"
-                  >
-                    {/* Image Area: Top on mobile, Right on desktop */}
-                    <div className="relative w-full h-[220px] sm:h-[240px] md:absolute md:inset-y-0 md:right-0 md:w-[45%] md:h-full overflow-hidden flex items-center justify-center bg-black/10 select-none shrink-0">
-                      {/* Ambient background glow of the image (desktop only) */}
-                      <div
-                        className="absolute inset-0 opacity-20 blur-xl scale-125 hidden md:block"
-                        style={{
-                          backgroundImage: `url(${puja.imageUrl})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                        }}
-                      />
-
-                      {/* Main Image */}
-                      <img
-                        src={puja.imageUrl}
-                        alt={puja.title}
-                        className={`w-full h-full object-cover object-top transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${idx === activeIndex ? 'scale-100 opacity-90 md:opacity-100' : 'scale-108 opacity-40'}`}
-                      />
-
-                      {/* Mobile bottom fade to blend top image into bottom purple area */}
-                      <div className="absolute inset-0 md:hidden bg-gradient-to-t from-[#3b0764] via-[#3b0764]/30 to-transparent" />
-
-                      {/* Premium Vignette Fade transition on desktop */}
-                      <div className="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-[#3b0764] to-transparent hidden md:block z-20" />
-                    </div>
-
-                    {/* Content Area: Bottom on mobile, Left on desktop */}
-                    <div className="relative md:absolute md:inset-0 z-10 flex flex-col justify-center items-center md:items-start text-center md:text-left md:w-[60%] p-6 md:p-10 text-white flex-1">
-                      <div className="space-y-4 md:space-y-6 w-full flex flex-col items-center md:items-start">
-                        <h2
-                          className={`max-w-xl text-xl font-extrabold leading-tight sm:text-2xl md:text-3xl lg:text-4xl text-white md:text-transparent md:bg-clip-text md:bg-linear-to-r md:from-white md:via-slate-100 md:to-amber-100 drop-shadow-md transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${idx === activeIndex ? 'opacity-100 translate-y-0 delay-150' : 'opacity-0 translate-y-6 duration-300 delay-0'}`}
-                        >
-                          {puja.title}
-                        </h2>
-
-                        <div
-                          className={`flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 sm:gap-6 w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${idx === activeIndex ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-6 duration-300 delay-0'}`}
-                        >
-                          {/* Location */}
-                          {puja.location && (
-                            <div className="flex items-center gap-1.5 text-xs md:text-sm text-gray-200 md:text-purple-200">
-                              <svg className="w-4 h-4 text-amber-400 shrink-0 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                              </svg>
-                              <span className="line-clamp-1">{puja.location}</span>
-                            </div>
-                          )}
-
-                          {/* CTA Button visible on mobile and desktop */}
-                          <Link
-                            href={`/puja/${puja.slug || slugify(puja.title)}`}
-                            className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-black text-[#3b0764] hover:bg-amber-400 transition-all hover:scale-105 shadow-lg shadow-amber-500/20 shrink-0"
-                          >
-                            {puja.buttonText || t.puja.bookNow}
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="absolute bottom-4 md:bottom-6 left-0 right-0 flex justify-center gap-2 z-20">
-              {carouselPujas.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setCurrentIndex(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${i === activeIndex ? "w-8 bg-white" : "w-2 bg-white/50"}`}
-                />
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setCurrentIndex((p) => (p === 0 ? carouselPujas.length - 1 : p - 1))}
-              aria-label="Previous slide"
-              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/30 p-2.5 text-white backdrop-blur-sm transition hover:bg-black/50"
-            >
-              <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5">
-                <path d="m12.5 4.5-5 5 5 5" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => setCurrentIndex((p) => (p === carouselPujas.length - 1 ? 0 : p + 1))}
-              aria-label="Next slide"
-              className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/30 p-2.5 text-white backdrop-blur-sm transition hover:bg-black/50"
-            >
-              <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5">
-                <path d="m7.5 4.5 5 5-5 5" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-
-
-          {/* Section */}
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold text-[#3b0764] md:text-3xl">
-              {t.puja.sectionTitle}
-            </h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#1f1f1f] md:text-base">
-              {t.puja.sectionSubtitle}
+      <ShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        pujaUrl={shareUrl}
+      />
+      <main className="min-h-screen bg-[#faf8f5]">
+        {/* Hero Section */}
+        <div className="bg-[#fef8f4] py-16 text-center border-b border-[#fde8d4] relative">
+          <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#f0d6c4_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          <div className="relative z-10 px-4">
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-[#5c2424] mb-4">Discover Sacred Pujas & Divine Blessings</h1>
+            <p className="text-[#6b4c4c] text-sm md:text-base max-w-2xl mx-auto mb-10">
+              Find authentic temples, rituals performed by qualified priests and receive personalized sankalpam, puja videos, and divine blessings.
             </p>
 
-            {/* -- Filter bar -- */}
-            <div className="mt-6">
-              <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
-                <button
-                  type="button"
-                  onClick={() => setIsFilterModalOpen(true)}
-                  className="flex shrink-0 items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-[#6869F9] shadow-sm transition hover:border-[#6869F9]/40 hover:bg-[#f5f3ff]"
-                >
-                  <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
-                    <path d="M3 5h14M6 10h8M9 15h2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                  </svg>
-                  {t.puja.filter}
-                </button>
-
-                <div className="h-6 w-px shrink-0 bg-gray-200" />
-
-                {filterGroups.map((group) => {
-                  const activeCount = filters[group.label]?.length || 0;
-                  const isActive = activeCount > 0;
-                  return (
-                    <button
-                      key={group.label}
-                      type="button"
-                      onClick={() => setIsFilterModalOpen(true)}
-                      className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-3 text-sm font-semibold transition ${isActive
-                        ? "bg-[#6869F9] text-white shadow-sm"
-                        : "bg-white text-gray-600 ring-1 ring-gray-200 hover:bg-gray-50"
-                        }`}
-                    >
-                      <span>{isActive ? (activeCount === 1 ? filters[group.label][0] : `${group.label} (${activeCount})`) : group.label}</span>
-                      <svg
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        className="h-3.5 w-3.5"
-                      >
-                        <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
-                  )
-                })}
-
-                {/* Clear all */}
+            {/* Search Bar + Filter */}
+            <div className="max-w-2xl mx-auto flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="What puja are you looking for?"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-6 pr-10 py-3.5 rounded-full border border-[#f0d6c4] shadow-sm text-sm outline-none focus:border-[#d95a2b]"
+                />
+                <svg className="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              </div>
+              <button
+                onClick={() => setIsFilterModalOpen(true)}
+                className="bg-white border border-[#f0d6c4] text-[#d95a2b] w-12 h-12 rounded-full flex items-center justify-center shadow-sm hover:bg-gray-50 shrink-0 relative"
+              >
                 {hasActiveFilters && (
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-500 transition hover:bg-red-100"
-                  >
-                    <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
-                      <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                    {t.puja.clearAll}
-                  </button>
+                  <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
                 )}
-              </div>
-
-              {/* Active filter tags */}
-              {hasActiveFilters && (
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t.puja.active}</span>
-                  {Object.entries(filters)
-                    .filter(([, v]) => v && v.length > 0)
-                    .flatMap(([key, values]) => values.map((val) => (
-                      <span
-                        key={`${key}-${val}`}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[#6869F9]/10 px-3 py-1 text-xs font-semibold text-[#6869F9]"
-                      >
-                        {key}: {val}
-                        <button
-                          type="button"
-                          onClick={() => setFilters((p) => ({ ...p, [key]: p[key].filter(v => v !== val) }))}
-                          aria-label={`Remove ${key} filter`}
-                          className="ml-0.5 rounded-full hover:opacity-70 transition-opacity"
-                        >
-                          <svg viewBox="0 0 12 12" fill="none" className="h-3 w-3">
-                            <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                          </svg>
-                        </button>
-                      </span>
-                    )))}
-                </div>
-              )}
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+              </button>
             </div>
+          </div>
+        </div>
 
-            {isFilterModalOpen && (
-              <PujaFilterModal
-                filters={filters}
-                onClose={() => setIsFilterModalOpen(false)}
-                onApply={applyFilters}
-                onClear={clearFilters}
-              />
+        <div className="mx-auto max-w-[1200px] px-4 md:px-8 py-10">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-serif font-bold text-[#5c2424]">Upcoming Online Pujas</h2>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-sm font-semibold text-red-500 hover:text-red-700 underline"
+              >
+                Clear Filters
+              </button>
             )}
+          </div>
 
-            {/* Result count */}
-            {!isLoading && (
-              <p className="mt-4 text-sm text-[#1f1f1f]">
-                {hasActiveFilters
-                  ? `${t.puja.showingPujas} ${displayedPujas.length} ${t.puja.of} ${allPujas.length} ${t.puja.pujas}`
-                  : `${allPujas.length} ${t.puja.allPujas}`}
-              </p>
-            )}
+          {/* Quick Categories Filter row */}
+          <div className="flex overflow-x-auto gap-2.5 pb-4 no-scrollbar mb-6">
+            <button
+              onClick={clearFilters}
+              className={`shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-colors ${!hasActiveFilters ? "bg-[#d95a2b] text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"}`}
+            >
+              All
+            </button>
+            {filterGroups.map(group => (
+              <button
+                key={group.label}
+                onClick={() => setIsFilterModalOpen(true)}
+                className={`shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-colors border ${filters[group.label]?.length > 0 ? "bg-[#d95a2b] text-white border-[#d95a2b]" : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"}`}
+              >
+                {group.label}
+              </button>
+            ))}
+          </div>
 
-            {/* -- Puja Cards -- */}
-            {isLoading ? null : displayedPujas.length === 0 ? (
-              <div className="mt-16 flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#c4b8ef] bg-white py-16 text-center">
-                <SparklesIcon className="h-10 w-10 text-[#1f1f1f]" />
-                <p className="text-lg font-semibold text-[#3b0764]">{t.puja.noMatch}</p>
-                <p className="text-sm text-[#1f1f1f]">{t.puja.noMatchSub}</p>
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="mt-2 rounded-full bg-[#6869F9] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#5657e8] transition"
-                >
-                  {t.puja.clearFilters}
-                </button>
-              </div>
-            ) : (
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:gap-8 sm:grid-cols-2 lg:gap-10 lg:grid-cols-3">
-                {displayedPujas.map((puja) => (
+          {/* Filter Modal */}
+          {isFilterModalOpen && (
+            <PujaFilterModal
+              filters={filters}
+              onClose={() => setIsFilterModalOpen(false)}
+              onApply={applyFilters}
+              onClear={clearFilters}
+            />
+          )}
+
+          {/* Grid of Cards */}
+          {isLoading ? (
+            <div className="mt-16 flex justify-center py-16">
+              <div className="w-8 h-8 border-4 border-[#d95a2b] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : displayedPujas.length === 0 ? (
+            <div className="mt-16 flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#e3d1c2] bg-white py-16 text-center">
+              <SparklesIcon className="h-10 w-10 text-[#d95a2b]" />
+              <p className="text-lg font-semibold text-[#5c2424]">{t.puja.noMatch}</p>
+              <p className="text-sm text-gray-500">{t.puja.noMatchSub}</p>
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="mt-2 rounded-full bg-[#d95a2b] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#b0451f] transition"
+              >
+                {t.puja.clearFilters}
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-8 lg:grid-cols-3">
+              {displayedPujas.map((puja) => {
+                const fullUrl = typeof window !== 'undefined' ? `${window.location.origin}/puja/${puja.slug || slugify(puja.title)}` : '';
+                return (
                   <div
                     key={puja._id}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col p-5"
+                    className="bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col overflow-hidden group hover:shadow-md transition-shadow"
                   >
-                    {/* Image Section */}
-                    <div className="relative h-[220px] w-full rounded-xl overflow-hidden shrink-0">
+                    <div className="relative h-[220px] w-full shrink-0">
                       <img
                         src={puja.imageUrl || "https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=800&q=80"}
                         alt={puja.title}
-                        className="w-full h-full object-fit"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
-                      {/* Top Left Badge */}
                       {puja.badge && (
-                        <div className="absolute top-3 left-3 bg-[#ffc107] text-[#1f1f1f] text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                        <div className="absolute top-4 left-0 bg-[#d92b2b] text-white text-[11px] font-bold px-3 py-1 shadow-sm rounded-r-md">
                           {puja.badge}
                         </div>
                       )}
+
+                      <div className="absolute top-4 right-4 flex flex-col gap-2">
+                        <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-600 hover:text-red-500 transition-colors">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                        </button>
+                        <button onClick={() => openShareModal(fullUrl)} className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm text-gray-600 hover:text-[#d95a2b] transition-colors">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Content Section */}
-                    <div className="pt-5 pb-1 px-1 flex flex-col flex-1 text-left">
-                      <p className="text-[#6869F9] text-[11px] font-bold uppercase tracking-widest mb-3 text-center w-full">
-                        {puja.subtitle || "SPECIAL PUJA & YAGYA"}
+                    <div className="p-5 flex flex-col flex-1 text-left">
+                      <p className="text-[#d95a2b] text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d95a2b]"></span>
+                        {puja.subtitle || "SPECIAL PUJA"}
                       </p>
-                      <h3 className="text-[18px] font-bold text-[#1f1f1f] mb-3 leading-snug">
+
+                      <h3 className="text-[18px] font-bold text-gray-900 mb-2 leading-snug line-clamp-2">
                         {puja.title}
                       </h3>
-                      <p className="text-gray-500 text-[14px] leading-relaxed line-clamp-2 mb-6 flex-1">
-                        {puja.description || "Join us for this sacred ritual to seek divine blessings."}
+
+                      <p className="text-gray-500 text-[13px] leading-relaxed line-clamp-2 mb-4 flex-1">
+                        {puja.description || "Join us for this sacred ritual to seek divine blessings and fulfillment."}
                       </p>
 
-                      {/* Location & Date */}
-                      <div className="flex items-start gap-2.5 mb-3 text-[13px] text-gray-500">
-                        <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                        <span className="line-clamp-2 leading-tight">{puja.location || "Sacred Temple, India"}</span>
-                      </div>
-                      <div className="flex items-start gap-2.5 mb-6 text-[13px] text-gray-500">
-                        <svg className="w-[16px] h-[16px] text-[#a78bfa] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        <span className="leading-tight">{puja.date || t.puja.announcedSoon}</span>
+                      <div className="border border-gray-100 rounded-lg p-3 space-y-2 mb-4 bg-gray-50/50">
+                        <div className="flex items-center gap-2.5 text-[12px] text-gray-600">
+                          <svg className="w-4 h-4 text-[#d95a2b] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                          <span className="line-clamp-1">{puja.location || "Vaidika Yagashala"}</span>
+                        </div>
+                        <div className="flex items-center gap-2.5 text-[12px] text-gray-600">
+                          <svg className="w-4 h-4 text-[#d95a2b] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          <span className="line-clamp-1">{puja.date || "Available Daily"}</span>
+                        </div>
                       </div>
 
-                      <Link href={`/puja/${puja.slug || slugify(puja.title)}`} className="w-full bg-[#6869F9] text-white text-[15px] font-bold tracking-wide py-3.5 rounded-lg hover:bg-[#5657e8] transition-colors flex items-center justify-center gap-1.5">
-                        {puja.buttonText || t.puja.bookNow}
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                      </Link>
+                      <div className="flex items-center justify-between mt-auto">
+                        <div>
+                          {/* We will attempt to get a price, otherwise show a placeholder */}
+                          <div className="text-[18px] font-black text-gray-900">₹{(puja as any).packages?.[0]?.priceINR || (puja as any).packages?.[0]?.price || '516'}</div>
+                          <div className="text-[10px] text-gray-500 font-semibold uppercase">Per Booking</div>
+                        </div>
+                        <Link
+                          href={`/puja/${puja.slug || slugify(puja.title)}`}
+                          className="bg-[#009e5b] text-white text-[13px] font-bold px-5 py-2.5 rounded-full hover:bg-[#008c51] transition-colors flex items-center gap-1.5 shadow-sm"
+                        >
+                          Book Now
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" /></svg>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* -- Reviews -- */}
-          <section className="mt-20 border-t border-gray-100 pt-16 pb-16">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl font-bold text-[#1f1f1f] md:text-3xl">{t.puja.devoteesTitle}</h2>
-              <p className="mt-2 text-sm text-gray-600 md:text-base">{t.puja.devoteesSubtitle}</p>
+                )
+              })}
             </div>
-            <ReviewsSection />
-          </section>
-
-          {/* -- Stats Section -- */}
-          <section className="mt-20">
-            <h2 className="mb-2 text-2xl font-bold text-[#1f1f1f] md:text-3xl">
-              {t.puja.sacredJourney}
-            </h2>
-            <p className="mb-8 text-sm text-gray-600">{t.puja.whyBook}</p>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl bg-linear-to-br from-[#eff6ff] to-[#dbeafe] p-8 text-center shadow-sm border border-[#bfdbfe]/50 flex flex-col items-center justify-center">
-                <h3 className="text-2xl font-black text-[#2563eb] whitespace-nowrap">10,00,000+</h3>
-                <p className="mt-1 text-sm font-semibold text-[#3b82f6]">{t.puja.pujasDone}</p>
-              </div>
-              <div className="rounded-2xl bg-linear-to-br from-[#f5f3ff] to-[#ede8ff] p-8 text-center shadow-sm border border-[#e0d9ff]/50 flex flex-col items-center justify-center">
-                <h3 className="text-2xl font-black text-[#7c3aed] whitespace-nowrap">300,000+</h3>
-                <p className="mt-1 text-sm font-semibold text-[#8b5cf6]">{t.puja.happyDevotees}</p>
-              </div>
-              <div className="rounded-2xl bg-linear-to-br from-[#fdf2f8] to-[#fce7f3] p-8 text-center shadow-sm border border-[#fbcfe8]/50 flex flex-col items-center justify-center">
-                <h3 className="text-2xl font-black text-[#db2777] whitespace-nowrap">100+</h3>
-                <p className="mt-1 text-sm font-semibold text-[#ec4899]">{t.puja.famousTemples}</p>
-              </div>
-              <div className="rounded-2xl bg-linear-to-br from-[#fff7ed] to-[#ffedd5] p-8 text-center shadow-sm border border-[#fed7aa]/50 flex flex-col items-center justify-center">
-                <h3 className="text-2xl font-black text-[#d97706] whitespace-nowrap">{t.puja.sankalp}</h3>
-                <p className="mt-1 text-sm font-semibold text-[#f59e0b]">{t.puja.sankalpDesc}</p>
-              </div>
+          )}
+          {displayedPujas.length > 0 && !isLoading && (
+            <div className="mt-12 text-center pb-10">
+              <p className="text-[16px] sm:text-[18px] mb-2 font-medium text-gray-600">You've reached the end of available pujas</p>
+              <p className="text-[14px] text-gray-500">{displayedPujas.length} of {displayedPujas.length} pujas shown</p>
             </div>
-          </section>
-
-          <HowItWorksCarousel title={t.puja.howItWorks} steps={howItWorksSteps} />
+          )}
         </div>
       </main>
     </>
