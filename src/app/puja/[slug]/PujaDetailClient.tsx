@@ -482,7 +482,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
+
     // Intersection Observer for mobile floating button
     const packageSection = document.getElementById("packages");
     if (packageSection) {
@@ -1177,7 +1177,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                       <div className="mt-6 sm:mt-8 grid gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                         {puja.details.process.map((step, idx) => (
                           <div key={`process-${idx}`} className="flex gap-3 items-start">
-                            <div 
+                            <div
                               className="flex h-6 w-8 shrink-0 items-center justify-center bg-[#6869F9] text-[13px] font-bold text-white shadow-sm pr-1 mt-0.5"
                               style={{ clipPath: 'polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)' }}
                             >
@@ -1306,16 +1306,16 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                             );
                           })}
                         </div>
-                        
+
                         {/* Mobile Package Grid */}
                         <div className="flex md:hidden flex-col gap-4 mt-6">
                           {puja.packages.map((pkg, idx) => {
                             const isSelected = selectedPackage?.id === pkg.id;
                             const badgeLabel = PERSON_LABELS[idx] ?? `${idx + 1} Person`;
                             const personColor = idx === 0 ? "bg-[#d95a2b] text-white" : (idx === 1 ? "bg-[#fce4eb] text-[#a51d4e]" : "bg-[#f0f4eb] text-[#3c5a14]");
-                            
+
                             return (
-                              <div 
+                              <div
                                 key={`pkg-mob-${pkg.id}`}
                                 onClick={() => setSelectedPackageId(pkg.id)}
                                 className={`rounded-xl border ${isSelected ? "border-[#d95a2b] bg-[#fffaf8]" : "border-gray-200 bg-white"} overflow-hidden transition-all duration-300 relative cursor-pointer shadow-sm`}
@@ -1330,7 +1330,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                       <i className="fa-regular fa-user text-[9px] mr-1"></i> {badgeLabel}
                                     </div>
                                   </div>
-                                  
+
                                   {/* Right side: Text + Radio */}
                                   <div className="flex-1 flex flex-col justify-center">
                                     <div className="flex justify-between items-start">
@@ -1347,11 +1347,11 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                     <p className="text-[16px] text-[#d95a2b] font-medium mt-1">{currencySymbol}{getDisplayPrice(pkg)}</p>
                                   </div>
                                 </div>
-                                
+
                                 {/* Participate Button for Active Package */}
                                 {isSelected && (
                                   <div className="px-4 pb-4 pt-1">
-                                    <button 
+                                    <button
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         if (selectedPackageId) {
@@ -1403,7 +1403,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                                 <i className="fa-solid fa-shield mr-1"></i> No Hidden Cost
                               </Marquee>
                             </div>
-                            <button 
+                            <button
                               onClick={() => {
                                 if (selectedPackageId) {
                                   if (isIndian) {
@@ -1742,9 +1742,9 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                             {/* Person badge under the image */}
                             <div
                               className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[11px] font-bold transition-colors"
-                              style={{ 
-                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg, 
-                                color: isSelected ? "#ffffff" : theme.badgeText 
+                              style={{
+                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg,
+                                color: isSelected ? "#ffffff" : theme.badgeText
                               }}
                             >
                               <i className="fa-solid fa-user text-[10px]"></i>
@@ -1818,7 +1818,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                         radioBg: "#836814", participateBg: "#836814", cardBg: "#FDFAF2",
                       },
                     ];
-                    
+
                     return displayPackages.map((pkg, idx) => {
                       const isSelected = selectedPackageId === pkg.id;
                       const theme = themes[idx] || themes[0];
@@ -1837,17 +1837,17 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                         >
                           {/* Top row: person badge + radio */}
                           <div className="flex items-center justify-between w-full mb-2">
-                            <span 
+                            <span
                               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors"
-                              style={{ 
-                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg, 
-                                color: isSelected ? "#ffffff" : theme.badgeText 
+                              style={{
+                                backgroundColor: isSelected ? theme.participateBg : theme.badgeBg,
+                                color: isSelected ? "#ffffff" : theme.badgeText
                               }}
                             >
                               <i className="fa-solid fa-user text-[9px]"></i>
                               {personLabel}
                             </span>
-                            <div 
+                            <div
                               className="h-[22px] w-[22px] rounded-full flex items-center justify-center transition-colors"
                               style={{
                                 border: isSelected ? 'none' : '1px solid #d1d5db',
@@ -1862,7 +1862,7 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
                           <h4 className="text-[14px] font-bold text-[#1f1f1f] leading-snug w-[65%] z-10 mt-1">{pkg.name}</h4>
 
                           {/* Price */}
-                          <span 
+                          <span
                             className="mt-auto text-[18px] font-black z-10"
                             style={{ color: isSelected ? theme.priceColor : "#1f1f1f" }}
                           >
@@ -2104,16 +2104,15 @@ export default function PujaDetailClient({ initialPuja, recommendations = [] }: 
         </div>
       )}
       {/* Mobile Floating "Select puja package" Bar */}
-      <div 
-        className={`md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-40 transition-transform duration-300 ${
-          isPackagesVisible ? 'translate-y-full' : 'translate-y-0'
-        }`}
+      <div
+        className={`md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 z-40 transition-transform duration-300 ${isPackagesVisible ? 'translate-y-full' : 'translate-y-0'
+          }`}
       >
-        <button 
-          onClick={() => setShowPackageModal(true)} 
+        <button
+          onClick={() => setShowPackageModal(true)}
           className="w-full bg-[#00b268] text-white py-3.5 rounded-lg font-bold text-[15px] flex items-center justify-center gap-2 shadow-sm active:bg-[#009e5c] transition-colors"
         >
-          Select puja package 
+          Select puja package
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>

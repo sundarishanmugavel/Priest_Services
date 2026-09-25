@@ -339,11 +339,11 @@ export async function sendOtp(payload: {
       CountryCode: countryCodeNoPlus,
       MobileNo: mobileNo,
     });
-    
+
     if (isOtpSendSuccess(smsFallback)) {
       return { message: "WhatsApp delivery unavailable. OTP sent via SMS instead." };
     }
-    
+
     if (isRateLimited(smsFallback)) {
       throw new AstrovedAuthError(smsFallback.Message || "Too many requests.", 429, smsFallback.Status ?? undefined);
     }
@@ -432,14 +432,14 @@ export async function verifyOtp(payload: {
       MobileNo: mobileNo,
       OTP: payload.otp,
     });
-    
+
     if (smsFallback.loginInfo) return smsFallback.loginInfo;
-    
+
     // If SMS fallback failed with 417, it's a real account error
     if (smsFallback.StatusCode === 417) {
       throw new AstrovedAuthError("Something went wrong with your account. Please contact support.", 400, smsFallback.Status ?? undefined);
     }
-    
+
     throw new AstrovedAuthError(smsFallback.Message || "Invalid OTP. Please try again.", 401, smsFallback.Status ?? undefined);
   }
 
@@ -514,11 +514,11 @@ export async function resendOtp(payload: {
       CountryCode: countryCodeNoPlus,
       MobileNo: mobileNo,
     });
-    
+
     if (isOtpSendSuccess(smsFallback)) {
       return { message: "WhatsApp delivery unavailable. OTP resent via SMS instead." };
     }
-    
+
     if (isRateLimited(smsFallback)) {
       throw new AstrovedAuthError(smsFallback.Message || "Too many requests.", 429, smsFallback.Status ?? undefined);
     }
